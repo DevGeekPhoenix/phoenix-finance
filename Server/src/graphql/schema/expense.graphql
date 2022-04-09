@@ -1,0 +1,19 @@
+
+
+type Expense {
+  _id: ID!
+  amount: Float!
+  tags: [Tag!]!
+  geo: Geo!
+}
+
+input ExpenseInfo {
+  amount: Float!
+  geo: GeoInput!
+  tags: [ID!]!
+}
+
+type Mutation {
+  create_expense(data: ExpenseInfo!): Status!
+}
+

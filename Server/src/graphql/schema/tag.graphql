@@ -1,0 +1,21 @@
+
+type Tag {
+  _id: ID!
+  name: String!
+  color: String!
+}
+
+input tagInfo {
+  name: String!
+  color: String!
+}
+
+# type Query {
+
+# }
+
+
+type Mutation {
+  create_tag(data: tagInfo!): Status!
+  edit_tag(_id: ID!, data: tagInfo!): Status!
+}

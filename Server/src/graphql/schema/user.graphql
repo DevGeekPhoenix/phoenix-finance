@@ -1,0 +1,25 @@
+
+
+type User {
+  _id: ID!
+  name: String!
+  username: String!
+}
+
+type Me {
+  _id: ID!
+  name: String!
+  username: String!
+  myTags: [Tag!]!
+  myExpenses: [Expense!]!
+}
+
+
+type Query {
+  me: Me!
+}
+
+type Mutation {
+  signup(name: String!, username: String!, password: String!): Token!
+  login(username: String!, password: String!): Token!
+}
