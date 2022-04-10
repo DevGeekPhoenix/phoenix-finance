@@ -32,7 +32,7 @@ var _jsonwebtoken = _interopRequireDefault(require("jsonwebtoken"));
 var doesCacheneedsUpdate = true;
 var cache = null;
 
-var userDirectory = _path["default"].join(process.cwd(), '/src/db/users');
+var userDirectory = _path["default"].join(process.cwd(), "/src/db/users");
 
 var UserSchema = /*#__PURE__*/function () {
   function UserSchema() {
@@ -43,20 +43,20 @@ var UserSchema = /*#__PURE__*/function () {
     key: "create",
     value: function () {
       var _create = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(_ref) {
-        var name, username, password, allUsers, ifuserexists, salt, hash, userID, userInfo, data, dest;
+        var name, username, password, img, allUsers, ifuserexists, salt, hash, userID, userInfo, data, dest;
         return _regenerator["default"].wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                name = _ref.name, username = _ref.username, password = _ref.password;
+                name = _ref.name, username = _ref.username, password = _ref.password, img = _ref.img;
                 _context.prev = 1;
 
-                if (!(!name || !username || !password)) {
+                if (!(!name || !username || !password || !img)) {
                   _context.next = 4;
                   break;
                 }
 
-                throw new Error('bad input');
+                throw new Error("bad input");
 
               case 4:
                 _context.next = 6;
@@ -73,7 +73,7 @@ var UserSchema = /*#__PURE__*/function () {
                   break;
                 }
 
-                throw new Error('this is username already exists');
+                throw new Error("this is username already exists");
 
               case 10:
                 salt = (0, _bcrypt.genSaltSync)(9);
@@ -82,6 +82,7 @@ var UserSchema = /*#__PURE__*/function () {
                 userInfo = {
                   name: name,
                   username: username,
+                  img: img,
                   _id: userID,
                   password: hash
                 };
@@ -136,10 +137,10 @@ var UserSchema = /*#__PURE__*/function () {
 
               case 3:
                 x = (0, _fs.readdirSync)(userDirectory).reduce(function (acc, cur, i) {
-                  return acc + "".concat(i == 0 ? '' : ',') + (0, _fs.readFileSync)(_path["default"].join(userDirectory, "/".concat(cur, "/info.txt")), {
+                  return acc + "".concat(i == 0 ? "" : ",") + (0, _fs.readFileSync)(_path["default"].join(userDirectory, "/".concat(cur, "/info.txt")), {
                     encoding: "utf8"
                   });
-                }, '[');
+                }, "[");
                 y = "".concat(x, "]");
                 result = JSON.parse(y);
                 doesCacheneedsUpdate = false;
@@ -184,7 +185,7 @@ var UserSchema = /*#__PURE__*/function () {
                   break;
                 }
 
-                throw new Error('bad request');
+                throw new Error("bad request");
 
               case 4:
                 return _context3.abrupt("return", thisUser);
@@ -192,7 +193,7 @@ var UserSchema = /*#__PURE__*/function () {
               case 7:
                 _context3.prev = 7;
                 _context3.t0 = _context3["catch"](0);
-                console.log('error in findbyid', _context3.t0);
+                console.log("error in findbyid", _context3.t0);
                 throw _context3.t0;
 
               case 11:
@@ -213,18 +214,19 @@ var UserSchema = /*#__PURE__*/function () {
     key: "signup",
     value: function () {
       var _signup = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee4(_ref2) {
-        var name, username, password, thisUser;
+        var name, username, password, img, thisUser;
         return _regenerator["default"].wrap(function _callee4$(_context4) {
           while (1) {
             switch (_context4.prev = _context4.next) {
               case 0:
-                name = _ref2.name, username = _ref2.username, password = _ref2.password;
+                name = _ref2.name, username = _ref2.username, password = _ref2.password, img = _ref2.img;
                 _context4.prev = 1;
                 _context4.next = 4;
                 return this.create({
                   name: name,
                   username: username,
-                  password: password
+                  password: password,
+                  img: img
                 });
 
               case 4:
@@ -255,7 +257,7 @@ var UserSchema = /*#__PURE__*/function () {
     value: function createToken(_id) {
       return _jsonwebtoken["default"].sign({
         _id: _id
-      }, 'SECRET');
+      }, "SECRET");
     }
   }, {
     key: "login",
@@ -281,7 +283,7 @@ var UserSchema = /*#__PURE__*/function () {
                   break;
                 }
 
-                throw new Error('bad request');
+                throw new Error("bad request");
 
               case 7:
                 if ((0, _bcrypt.compareSync)(password, thisUser.password)) {
@@ -289,7 +291,7 @@ var UserSchema = /*#__PURE__*/function () {
                   break;
                 }
 
-                throw new Error('password doesnt match');
+                throw new Error("password doesnt match");
 
               case 9:
                 return _context5.abrupt("return", this.createToken(thisUser._id));

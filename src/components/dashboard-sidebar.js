@@ -49,11 +49,6 @@ const items = [
     icon: <LockIcon fontSize="small" />,
     title: "Login",
   },
-  {
-    href: "/register",
-    icon: <UserAddIcon fontSize="small" />,
-    title: "Register",
-  },
 ];
 
 export const DashboardSidebar = (props) => {

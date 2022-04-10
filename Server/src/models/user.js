@@ -1,105 +1,107 @@
+import {
+  writeFileSync,
+  appendFileSync,
+  existsSync,
+  mkdirSync,
+  readFileSync,
+  readdirSync,
+} from "fs";
+import path from "path";
 
-import { writeFileSync, appendFileSync, existsSync, mkdirSync, readFileSync, readdirSync} from 'fs'
-import path from 'path'
-
-import { UID } from '../lib'
-import { genSaltSync, compareSync, hashSync } from 'bcrypt'
+import { UID } from "../lib";
+import { genSaltSync, compareSync, hashSync } from "bcrypt";
 
 // import dotenv from 'dotenv'
 
-import jwt from 'jsonwebtoken'
+import jwt from "jsonwebtoken";
 
 // dotenv.config();
 
-let doesCacheneedsUpdate = true
-let cache = null
+let doesCacheneedsUpdate = true;
+let cache = null;
 
-const userDirectory = path.join(process.cwd(), '/src/db/users')
+const userDirectory = path.join(process.cwd(), "/src/db/users");
 
 class UserSchema {
+  constructor() {}
 
-  constructor() {
-
-  }
-
-  async create({ name, username, password }) {
+  async create({ name, username, password, img }) {
     try {
-      if (!name || !username || !password) throw new Error('bad input')
+      if (!name || !username || !password || !img) throw new Error("bad input");
 
-      const allUsers = await this.findAll()
+      const allUsers = await this.findAll();
 
-      const ifuserexists = allUsers.some(item => item.username === username)
+      const ifuserexists = allUsers.some((item) => item.username === username);
 
-      if (ifuserexists) throw new Error('this is username already exists')
+      if (ifuserexists) throw new Error("this is username already exists");
 
-      const salt = genSaltSync(9)
+      const salt = genSaltSync(9);
       const hash = hashSync(password, salt);
-      const userID = UID()
-      const userInfo = { name, username, _id: userID, password: hash };
+      const userID = UID();
+      const userInfo = { name, username, img, _id: userID, password: hash };
 
-      const data = JSON.stringify(userInfo)
+      const data = JSON.stringify(userInfo);
 
       if (!existsSync(`${userDirectory}/${userID}`)) {
-        mkdirSync(`${userDirectory}/${userID}`)
+        mkdirSync(`${userDirectory}/${userID}`);
       }
 
-      const dest = `${userDirectory}/${userID}/info.txt`
+      const dest = `${userDirectory}/${userID}/info.txt`;
 
-      writeFileSync(dest, data, "utf8")
-      doesCacheneedsUpdate = true
+      writeFileSync(dest, data, "utf8");
+      doesCacheneedsUpdate = true;
 
-      return userInfo
-
+      return userInfo;
     } catch (error) {
-      console.log(error)
-      throw error
+      console.log(error);
+      throw error;
     }
   }
 
-
   async findAll() {
     try {
+      if (!doesCacheneedsUpdate && cache) return cache;
 
-      if (!doesCacheneedsUpdate && cache) return cache
+      const x = readdirSync(userDirectory).reduce(
+        (acc, cur, i) =>
+          acc +
+          `${i == 0 ? "" : ","}` +
+          readFileSync(path.join(userDirectory, `/${cur}/info.txt`), { encoding: "utf8" }),
+        "["
+      );
+      const y = `${x}]`;
 
-      const x = readdirSync(userDirectory)
-        .reduce((acc, cur, i) => acc + `${i == 0 ? '' : ','}`+ readFileSync(path.join(userDirectory, `/${cur}/info.txt`), { encoding: "utf8" }), '[')
-      const y = `${x}]`
+      const result = JSON.parse(y);
 
-      const result = JSON.parse(y)
+      doesCacheneedsUpdate = false;
+      cache = result;
 
-      doesCacheneedsUpdate = false
-      cache = result
-
-      return result
-
+      return result;
     } catch (error) {
-      throw error
+      throw error;
     }
   }
 
   async findById(_id) {
     try {
-      const thisUser = JSON.parse(readFileSync(path.join(userDirectory, `/${_id}/info.txt`), { encoding: "utf8" }))
-      if (!thisUser || !thisUser._id) throw new Error('bad request')
-      return thisUser
-
+      const thisUser = JSON.parse(
+        readFileSync(path.join(userDirectory, `/${_id}/info.txt`), { encoding: "utf8" })
+      );
+      if (!thisUser || !thisUser._id) throw new Error("bad request");
+      return thisUser;
     } catch (error) {
-      console.log('error in findbyid', error)
-      throw error
+      console.log("error in findbyid", error);
+      throw error;
     }
   }
 
-  async signup({ name, username, password }) {
-    
+  async signup({ name, username, password, img }) {
     try {
+      const thisUser = await this.create({ name, username, password, img });
 
-      const thisUser = await this.create({name, username, password})
-
-      return this.createToken(thisUser._id)
-      
+      return this.createToken(thisUser._id);
     } catch (error) {
-      throw error
+      throw error;
     }
   }
 
@@ -108,47 +110,41 @@ class UserSchema {
       {
         _id,
       },
-      'SECRET'
-    )
+      "SECRET"
+    );
   }
 
   async login({ username, password }) {
     try {
+      const thisUser = (await this.findAll()).find((user) => user.username === username);
 
-      const thisUser = (await this.findAll()).find(user => user.username === username)
+      if (!thisUser || !thisUser._id) throw new Error("bad request");
 
-      if (!thisUser || !thisUser._id) throw new Error('bad request')
+      if (!compareSync(password, thisUser.password)) throw new Error("password doesnt match");
 
-      if (!compareSync(password, thisUser.password)) throw new Error('password doesnt match')
-
-      return this.createToken(thisUser._id)
-
+      return this.createToken(thisUser._id);
     } catch (error) {
-      throw error
+      throw error;
     }
   }
 
   async findByIdAndUpdate(_id, data) {
-
     try {
+      const thisUser = await this.findById(_id);
 
-      const thisUser = await this.findById(_id)
+      Object.entries(data).forEach(([key, value]) => (thisUser[key] = value));
 
-      Object.entries(data).forEach(([key, value]) => thisUser[key] = value)
+      const dest = `${userDirectory}/${thisUser._id}/info.txt`;
 
-      const dest = `${userDirectory}/${thisUser._id}/info.txt`
+      writeFileSync(dest, thisUser, "utf8");
 
-      writeFileSync(dest, thisUser, "utf8")
-
-      return true
-
+      return true;
     } catch (error) {
-      throw error
+      throw error;
     }
-    
   }
 }
 
-const User = new UserSchema()
+const User = new UserSchema();
 
 export default User;
