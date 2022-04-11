@@ -5,12 +5,14 @@ type Expense {
   amount: Float!
   tags: [Tag!]!
   geo: Geo!
+  date: Date!
 }
 
 input ExpenseInfo {
   amount: Float!
   geo: GeoInput!
   tags: [ID!]!
+  date: Date!
 }
 
 type Mutation {

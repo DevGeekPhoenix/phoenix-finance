@@ -127,37 +127,29 @@ var UserSchema = /*#__PURE__*/function () {
             switch (_context2.prev = _context2.next) {
               case 0:
                 _context2.prev = 0;
-
-                if (!(!doesCacheneedsUpdate && cache)) {
-                  _context2.next = 3;
-                  break;
-                }
-
-                return _context2.abrupt("return", cache);
-
-              case 3:
+                // if (!doesCacheneedsUpdate && cache) return cache
                 x = (0, _fs.readdirSync)(userDirectory).reduce(function (acc, cur, i) {
                   return acc + "".concat(i == 0 ? "" : ",") + (0, _fs.readFileSync)(_path["default"].join(userDirectory, "/".concat(cur, "/info.txt")), {
                     encoding: "utf8"
                   });
                 }, "[");
                 y = "".concat(x, "]");
-                result = JSON.parse(y);
-                doesCacheneedsUpdate = false;
-                cache = result;
+                result = JSON.parse(y); // doesCacheneedsUpdate = false
+                // cache = result
+
                 return _context2.abrupt("return", result);
 
-              case 11:
-                _context2.prev = 11;
+              case 7:
+                _context2.prev = 7;
                 _context2.t0 = _context2["catch"](0);
                 throw _context2.t0;
 
-              case 14:
+              case 10:
               case "end":
                 return _context2.stop();
             }
           }
-        }, _callee2, null, [[0, 11]]);
+        }, _callee2, null, [[0, 7]]);
       }));
 
       function findAll() {
@@ -225,8 +217,8 @@ var UserSchema = /*#__PURE__*/function () {
                 return this.create({
                   name: name,
                   username: username,
-                  password: password,
-                  img: img
+                  img: img,
+                  password: password
                 });
 
               case 4:

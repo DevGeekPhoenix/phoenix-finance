@@ -13,10 +13,10 @@ class ExpenseSchema {
 
   constructor() {}
 
-  async create({ amount, tags, geo, userId }) {
+  async create({ amount, tags, geo, userId, date }) {
     try {
       if (!amount || !tags || !Array.isArray(tags) || !geo || !geo.lat || !geo.lon || !userId) throw new Error('bad input')
-      const data = { amount, tags, geo, _id: UID() }
+      const data = { amount, tags, geo, date, _id: UID() }
 
       const userTags = await Tag.findUserTags(userId)
 

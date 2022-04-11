@@ -1,53 +1,43 @@
+import User from "../../models/user";
+import Tag from "../../models/tag";
 
-
-
-import User from '../../models/user'
-import Tag from '../../models/tag'
-
-import authorizeUser from '../../lib/auth'
-
+import authorizeUser from "../../lib/auth";
 
 export default {
-  root: {
-
-  },
+  root: {},
   Query: {
-    me: async (_, data, {user}) => {
+    me: async (_, data, { user }) => {
       try {
+        const thisuser = await authorizeUser(user);
 
-        const thisuser = await authorizeUser(user)
-
-        return thisuser
+        return thisuser;
       } catch (error) {
-        console.log(error)
-        throw error
+        console.log(error);
+        throw error;
       }
-    }
+    },
   },
   Mutation: {
     signup: async (_, data) => {
-      
       try {
-        
-        const token = await User.signup(data)
-        
-        return {
-          token
-        }
+        const token = await User.signup(data);
 
+        return {
+          token,
+        };
       } catch (error) {
-        throw error
+        throw error;
       }
     },
     login: async (_, data) => {
       try {
-        const token = await User.login(data)
+        const token = await User.login(data);
         return {
-          token
-        }
+          token,
+        };
       } catch (error) {
-        throw error
+        throw error;
       }
-    }
-  }
-}
+    },
+  },
+};

@@ -2,7 +2,6 @@ type User {
   _id: ID!
   name: String!
   username: String!
-  img: String!
 }
 
 type Me {
@@ -19,6 +18,11 @@ type Query {
 }
 
 type Mutation {
-  signup(name: String!, username: String!, img: String!, password: String!): Token!
+  signup(
+    name: String!
+    username: String!
+    img: String!
+    password: String!
+  ): Token!
   login(username: String!, password: String!): Token!
 }

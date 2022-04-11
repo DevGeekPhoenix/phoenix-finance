@@ -17,6 +17,8 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import Cookies from "universal-cookie";
 import { useState, useEffect } from "react";
 import { useQuery, gql, useMutation } from "@apollo/client";
+import { useSelector, useDispatch } from "react-redux";
+import { setUserToken } from "../Redux/Reducer";
 
 const cookies = new Cookies();
 
@@ -30,6 +32,7 @@ const signup = gql`
 
 const Register = () => {
   const [submit] = useMutation(signup);
+  const dispatch = useDispatch();
 
   const router = useRouter();
   const formik = useFormik({
@@ -61,10 +64,11 @@ const Register = () => {
         });
         if (signup.token) {
           cookies.set("ut", signup.token);
+          dispatch(setUserToken(signup.token));
           router.push("/dashboard");
         }
       } catch (error) {
-        alert("UserName or Password is wrong");
+        alert(error);
       }
     },
   });

@@ -1,47 +1,60 @@
-import { InMemoryCache } from "apollo-cache-inmemory";
-import { ApolloClient } from "apollo-client";
-import { ApolloLink } from "apollo-link";
-import { onError } from "apollo-link-error";
-import { setContext } from "apollo-link-context";
-import { createUploadLink } from "apollo-upload-client";
+import React, { useMemo, useRef } from "react";
+import { useSelector, useDispatch } from "react-redux";
 
-const cache = new InMemoryCache();
-//
-const errorLink = onError(({ graphQLErrors, networkError, operation }) => {
-  if (graphQLErrors) {
-    graphQLErrors.forEach(({ message, location, path }) => {
-      console.log(`message:${message} location:${location}`);
+import {
+  ApolloClient,
+  createHttpLink,
+  InMemoryCache,
+  ApolloProvider,
+  ApolloLink,
+} from "@apollo/client";
+import { onError } from "@apollo/client/link/error";
+
+import { setContext } from "@apollo/client/link/context";
+
+const graphqlEndpoint = `http://localhost:80/graphql`;
+
+// The name here doesn't really matter.
+export default function CustomApolloProvider(props) {
+  const userToken = useSelector((state) => state.data.userToken);
+
+  const tokenRef = useRef();
+
+  // Whenever the token changes, the component re-renders, thus updating the ref.
+  tokenRef.current = userToken;
+
+  // Ensure that the client is only created once.
+  const client = useMemo(() => {
+    const authLink = setContext((_, { headers }) => ({
+      headers: {
+        ...headers,
+        auth: tokenRef.current ? `ut ${tokenRef.current}` : null,
+      },
+    }));
+
+    const errorLink = onError(({ graphQLErrors, networkError, operation }) => {
+      if (graphQLErrors) {
+        graphQLErrors.forEach(({ message, location, path }) => {
+          console.log(`message:${message} location:${location}`);
+        });
+      }
+
+      if (networkError) {
+        console.log(`networkerror: ${networkError}`);
+      }
     });
-  }
 
-  if (networkError) {
-    console.log(`networkerror: ${networkError}`);
-  }
-});
+    const httpLink = createHttpLink({
+      uri: graphqlEndpoint,
+    });
 
-const authLink = setContext(async (_, { headers, ...rest }) => {
-  // read from cookies
-  // ut
-  // Bearer Token
+    const link = ApolloLink.from([errorLink, authLink, httpLink]);
 
-  const userToken = null;
+    return new ApolloClient({
+      link,
+      cache: new InMemoryCache(),
+    });
+  }, [userToken]);
 
-  return {
-    ...rest,
-    headers: {
-      ...headers,
-      authorization: userToken ? `Bearer ${userToken}` : null,
-    },
-  };
-});
-
-const httpLink = createUploadLink({ uri: `http://localhost:80/graphql` });
-
-const link = ApolloLink.from([errorLink, authLink, httpLink]);
-
-const client = new ApolloClient({
-  cache,
-  link,
-});
-
-export default client;
+  return <ApolloProvider client={client} {...props} />;
+}

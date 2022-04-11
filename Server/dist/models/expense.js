@@ -34,12 +34,12 @@ var ExpenseSchema = /*#__PURE__*/function () {
     key: "create",
     value: function () {
       var _create = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(_ref) {
-        var amount, tags, geo, userId, data, userTags, cache, doIContinue, dest;
+        var amount, tags, geo, userId, date, data, userTags, cache, doIContinue, dest;
         return _regenerator["default"].wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                amount = _ref.amount, tags = _ref.tags, geo = _ref.geo, userId = _ref.userId;
+                amount = _ref.amount, tags = _ref.tags, geo = _ref.geo, userId = _ref.userId, date = _ref.date;
                 _context.prev = 1;
 
                 if (!(!amount || !tags || !Array.isArray(tags) || !geo || !geo.lat || !geo.lon || !userId)) {
@@ -54,6 +54,7 @@ var ExpenseSchema = /*#__PURE__*/function () {
                   amount: amount,
                   tags: tags,
                   geo: geo,
+                  date: date,
                   _id: (0, _lib.UID)()
                 };
                 _context.next = 7;

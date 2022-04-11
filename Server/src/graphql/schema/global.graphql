@@ -1,4 +1,5 @@
 
+scalar Date
 
 type Token {
   token: String!

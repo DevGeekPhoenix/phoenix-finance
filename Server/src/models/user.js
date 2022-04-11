@@ -60,21 +60,23 @@ class UserSchema {
 
   async findAll() {
     try {
-      if (!doesCacheneedsUpdate && cache) return cache;
+      // if (!doesCacheneedsUpdate && cache) return cache
 
       const x = readdirSync(userDirectory).reduce(
         (acc, cur, i) =>
           acc +
           `${i == 0 ? "" : ","}` +
-          readFileSync(path.join(userDirectory, `/${cur}/info.txt`), { encoding: "utf8" }),
+          readFileSync(path.join(userDirectory, `/${cur}/info.txt`), {
+            encoding: "utf8",
+          }),
         "["
       );
       const y = `${x}]`;
 
       const result = JSON.parse(y);
 
-      doesCacheneedsUpdate = false;
-      cache = result;
+      // doesCacheneedsUpdate = false
+      // cache = result
 
       return result;
     } catch (error) {
@@ -85,7 +87,9 @@ class UserSchema {
   async findById(_id) {
     try {
       const thisUser = JSON.parse(
-        readFileSync(path.join(userDirectory, `/${_id}/info.txt`), { encoding: "utf8" })
+        readFileSync(path.join(userDirectory, `/${_id}/info.txt`), {
+          encoding: "utf8",
+        })
       );
       if (!thisUser || !thisUser._id) throw new Error("bad request");
       return thisUser;
@@ -97,7 +101,7 @@ class UserSchema {
 
   async signup({ name, username, password, img }) {
     try {
-      const thisUser = await this.create({ name, username, password, img });
+      const thisUser = await this.create({ name, username, img, password });
 
       return this.createToken(thisUser._id);
     } catch (error) {
@@ -116,11 +120,14 @@ class UserSchema {
 
   async login({ username, password }) {
     try {
-      const thisUser = (await this.findAll()).find((user) => user.username === username);
+      const thisUser = (await this.findAll()).find(
+        (user) => user.username === username
+      );
 
       if (!thisUser || !thisUser._id) throw new Error("bad request");
 
-      if (!compareSync(password, thisUser.password)) throw new Error("password doesnt match");
+      if (!compareSync(password, thisUser.password))
+        throw new Error("password doesnt match");
 
       return this.createToken(thisUser._id);
     } catch (error) {

@@ -17,34 +17,17 @@ import { UserCircle as UserCircleIcon } from "../icons/user-circle";
 import { Users as UsersIcon } from "../icons/users";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { useQuery, gql } from "@apollo/client";
+import { useSelector, useDispatch } from "react-redux";
 import { useState, useEffect } from "react";
-import Cookies from "universal-cookie";
-const cookies = new Cookies();
 
 const DashboardNavbarRoot = styled(AppBar)(({ theme }) => ({
   backgroundColor: theme.palette.background.paper,
   boxShadow: theme.shadows[5],
 }));
 
-const getUser = gql`
-  query Me {
-    me {
-      name
-      img
-    }
-  }
-`;
-
 export const DashboardNavbar = (props) => {
-  const token = cookies.get("ut");
+  const userData = useSelector((state) => state.data.userData);
 
-  const [userdata, setuserdata] = useState(null);
-
-  const { data } = useQuery(getUser);
-  useEffect(() => {
-    setuserdata(data);
-  }, [data]);
-  console.log(userdata);
   const date = new Date();
 
   const months = [
@@ -103,32 +86,25 @@ export const DashboardNavbar = (props) => {
           >
             <MenuIcon fontSize="small" />
           </IconButton>
-
-          <IconButton sx={{ ml: 1 }}>
-            <CalendarMonthIcon fontSize="small" />
-            <Typography sx={{ ml: 1 }}>{day + " " + month + " " + year}</Typography>
-          </IconButton>
-
-          <Box sx={{ flexGrow: 1 }} />
-          <Tooltip title="Contacts">
+          <Box sx={{ width: "100vw", display: "flex", justifyContent: "space-between" }}>
             <IconButton sx={{ ml: 1 }}>
-              <UsersIcon fontSize="small" />
+              <CalendarMonthIcon fontSize="small" />
+              <Typography sx={{ ml: 1 }}>{day + " " + month + " " + year}</Typography>
             </IconButton>
-          </Tooltip>
-          <Tooltip title="Notifications">
-            <IconButton sx={{ ml: 1 }}>
-              <Badge badgeContent={4} color="primary" variant="dot">
-                <BellIcon fontSize="small" />
-              </Badge>
-            </IconButton>
-          </Tooltip>
+
+            <Typography alignSelf={"center"} fontSize="large" fontWeight="bold" color="GrayText">
+              Hi {userData?.name}
+            </Typography>
+          </Box>
+
           <Avatar
             sx={{
-              height: 40,
-              width: 40,
+              height: 70,
+              width: 70,
               ml: 1,
+              boxShadow: "0px 5px 5px #888888",
             }}
-            src="/static/images/avatars/avatar_1.png"
+            src={userData?.img}
           >
             <UserCircleIcon fontSize="small" />
           </Avatar>

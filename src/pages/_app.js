@@ -7,10 +7,13 @@ import { ThemeProvider } from "@mui/material/styles";
 import { createEmotionCache } from "../utils/create-emotion-cache";
 import { theme } from "../theme";
 import apolloClient from "../components/apollo-client";
-import { ApolloProvider } from "@apollo/react-hooks";
+// import { ApolloProvider } from "@apollo/react-hooks";
+import CustomApolloProvider from "../components/apollo-client";
 import Cookies from "universal-cookie";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
+import { Provider } from "react-redux";
+import { store } from "../Redux/Store";
 
 const cookies = new Cookies();
 
@@ -29,21 +32,23 @@ const App = (props) => {
   const getLayout = Component.getLayout ?? ((page) => page);
 
   return (
-    <ApolloProvider client={apolloClient}>
-      <CacheProvider value={emotionCache}>
-        <Head>
-          <title>Phoenix Finance</title>
-          <meta name="viewport" content="initial-scale=1, width=device-width" />
-        </Head>
+    <Provider store={store}>
+      <CustomApolloProvider>
+        <CacheProvider value={emotionCache}>
+          <Head>
+            <title>Phoenix Finance</title>
+            <meta name="viewport" content="initial-scale=1, width=device-width" />
+          </Head>
 
-        <LocalizationProvider dateAdapter={AdapterDateFns}>
-          <ThemeProvider theme={theme}>
-            <CssBaseline />
-            {getLayout(<Component {...pageProps} />)}
-          </ThemeProvider>
-        </LocalizationProvider>
-      </CacheProvider>
-    </ApolloProvider>
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <ThemeProvider theme={theme}>
+              <CssBaseline />
+              {getLayout(<Component {...pageProps} />)}
+            </ThemeProvider>
+          </LocalizationProvider>
+        </CacheProvider>
+      </CustomApolloProvider>
+    </Provider>
   );
 };
 

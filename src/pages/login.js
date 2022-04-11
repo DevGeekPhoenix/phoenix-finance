@@ -11,6 +11,9 @@ import { useState, useEffect } from "react";
 import { useQuery, gql, useMutation } from "@apollo/client";
 import Cookies from "universal-cookie";
 import { color } from "@mui/system";
+import { useSelector, useDispatch } from "react-redux";
+import { setUserToken } from "../Redux/Reducer";
+
 const cookies = new Cookies();
 
 const login = gql`
@@ -23,6 +26,7 @@ const login = gql`
 
 const Login = () => {
   const [submit] = useMutation(login);
+  const dispatch = useDispatch();
 
   const router = useRouter();
   const formik = useFormik({
@@ -41,8 +45,10 @@ const Login = () => {
         } = await submit({
           variables: { username: formik.values.UserName, password: formik.values.password },
         });
+        console.log("#######");
         if (login.token) {
           cookies.set("ut", login.token);
+          dispatch(setUserToken(login.token));
           router.push("/dashboard");
         }
       } catch (error) {
