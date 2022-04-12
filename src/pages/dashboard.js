@@ -10,48 +10,11 @@ import { TotalProfit } from "../components/dashboard/total-profit";
 import { TrafficByDevice } from "../components/dashboard/traffic-by-device";
 import { DashboardLayout } from "../components/dashboard-layout";
 import { Gradient } from "@mui/icons-material";
-import { useSelector, useDispatch } from "react-redux";
-import { useState, useEffect } from "react";
-import { setUserData } from "../Redux/Reducer";
-import { useQuery, gql } from "@apollo/client";
-
-const getUser = gql`
-  query Query {
-    me {
-      name
-      img
-      _id
-      username
-      myTags {
-        _id
-        name
-        color
-      }
-      myExpenses {
-        _id
-        amount
-        tags {
-          _id
-          name
-          color
-        }
-        geo {
-          lat
-          lon
-        }
-      }
-    }
-  }
-`;
+import { useSelector } from "react-redux";
 
 const Dashboard = () => {
   const userData = useSelector((state) => state.data.userData);
-  const dispatch = useDispatch();
 
-  const { data } = useQuery(getUser);
-  useEffect(() => {
-    dispatch(setUserData(data?.me));
-  }, [data]);
   console.log(userData);
 
   return (

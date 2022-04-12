@@ -10,11 +10,11 @@ import apolloClient from "../components/apollo-client";
 // import { ApolloProvider } from "@apollo/react-hooks";
 import CustomApolloProvider from "../components/apollo-client";
 import Cookies from "universal-cookie";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { Provider } from "react-redux";
 import { store } from "../Redux/Store";
-
+import SetDataToRedex from "src/components/SetDataToRedex";
 const cookies = new Cookies();
 
 const clientSideEmotionCache = createEmotionCache();
@@ -34,6 +34,7 @@ const App = (props) => {
   return (
     <Provider store={store}>
       <CustomApolloProvider>
+        <SetDataToRedex />
         <CacheProvider value={emotionCache}>
           <Head>
             <title>Phoenix Finance</title>

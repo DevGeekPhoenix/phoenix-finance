@@ -47,8 +47,8 @@ const Login = () => {
         });
         console.log("#######");
         if (login.token) {
-          cookies.set("ut", login.token);
           dispatch(setUserToken(login.token));
+          cookies.set("ut", login.token);
           router.push("/dashboard");
         }
       } catch (error) {
