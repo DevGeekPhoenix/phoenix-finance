@@ -1,21 +1,12 @@
 import Head from "next/head";
 import { Box, Container, Grid } from "@mui/material";
-import { Budget } from "../components/dashboard/budget";
 import { LatestTransactions } from "../components/dashboard/LatestTransactions";
-import { LatestProducts } from "../components/dashboard/latest-products";
-import { Sales } from "../components/dashboard/sales";
-import { TasksProgress } from "../components/dashboard/tasks-progress";
-import { TotalCustomers } from "../components/dashboard/total-customers";
 import { CardDetails } from "../components/dashboard/CardDetails";
-import { TrafficByDevice } from "../components/dashboard/traffic-by-device";
 import { DashboardLayout } from "../components/dashboard-layout";
-import { Gradient } from "@mui/icons-material";
 import { useSelector } from "react-redux";
 
 const Dashboard = () => {
   const userData = useSelector((state) => state.data.userData);
-
-  console.log(userData);
 
   return (
     <>

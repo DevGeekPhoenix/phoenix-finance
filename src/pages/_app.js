@@ -15,6 +15,8 @@ import { useRouter } from "next/router";
 import { Provider } from "react-redux";
 import { store } from "../Redux/Store";
 import SetDataToRedex from "src/components/SetDataToRedex";
+import "../map.css";
+
 const cookies = new Cookies();
 
 const clientSideEmotionCache = createEmotionCache();

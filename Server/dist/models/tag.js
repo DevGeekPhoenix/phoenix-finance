@@ -23,7 +23,7 @@ var _path = _interopRequireDefault(require("path"));
 
 var _lib = require("../lib");
 
-var userDirectory = _path["default"].join(process.cwd(), '/src/db/users');
+var userDirectory = _path["default"].join(process.cwd(), "/src/db/users");
 
 var TagSchema = /*#__PURE__*/function () {
   function TagSchema() {
@@ -47,7 +47,7 @@ var TagSchema = /*#__PURE__*/function () {
                   break;
                 }
 
-                throw new Error('bad input');
+                throw new Error("bad input");
 
               case 4:
                 data = {
@@ -104,10 +104,10 @@ var TagSchema = /*#__PURE__*/function () {
 
               case 3:
                 x = (0, _fs.readdirSync)("".concat(userDirectory, "/").concat(_id, "/tags")).reduce(function (acc, cur, i) {
-                  return acc + "".concat(i == 0 ? '' : ',') + (0, _fs.readFileSync)(_path["default"].join("".concat(userDirectory, "/").concat(_id, "/tags"), "/".concat(cur)), {
+                  return acc + "".concat(i == 0 ? "" : ",") + (0, _fs.readFileSync)(_path["default"].join("".concat(userDirectory, "/").concat(_id, "/tags"), "/".concat(cur)), {
                     encoding: "utf8"
                   });
-                }, '[');
+                }, "[");
                 y = "".concat(x, "]");
                 result = JSON.parse(y);
                 return _context2.abrupt("return", result);
@@ -198,7 +198,7 @@ var TagSchema = /*#__PURE__*/function () {
                   break;
                 }
 
-                throw new Error('bad request');
+                throw new Error("bad request");
 
               case 8:
                 Object.entries(realData).forEach(function (_ref4) {
@@ -208,7 +208,7 @@ var TagSchema = /*#__PURE__*/function () {
 
                   return thatTag[key] = value;
                 });
-                (0, _fs.writeFileSync)("".concat(userDirectory, "/").concat(userId, "/tags/").concat(_id), JSON.stringify(thatTag), "utf8");
+                (0, _fs.writeFileSync)("".concat(userDirectory, "/").concat(userId, "/tags/").concat(_id, ".txt"), JSON.stringify(thatTag), "utf8");
                 return _context4.abrupt("return", true);
 
               case 13:

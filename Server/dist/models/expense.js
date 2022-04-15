@@ -23,7 +23,7 @@ var _lib = require("../lib");
 
 var _tag = _interopRequireDefault(require("./tag"));
 
-var userDirectory = _path["default"].join(process.cwd(), '/src/db/users');
+var userDirectory = _path["default"].join(process.cwd(), "/src/db/users");
 
 var ExpenseSchema = /*#__PURE__*/function () {
   function ExpenseSchema() {
@@ -47,7 +47,7 @@ var ExpenseSchema = /*#__PURE__*/function () {
                   break;
                 }
 
-                throw new Error('bad input');
+                throw new Error("bad input");
 
               case 4:
                 data = {
@@ -64,7 +64,7 @@ var ExpenseSchema = /*#__PURE__*/function () {
                 userTags = _context.sent;
                 cache = {};
                 userTags.forEach(function (item) {
-                  return cache[item.id] = item;
+                  return cache[item._id] = item;
                 });
                 doIContinue = tags.every(function (item) {
                   return !!cache[item];
@@ -75,7 +75,7 @@ var ExpenseSchema = /*#__PURE__*/function () {
                   break;
                 }
 
-                throw new Error('invalid tags');
+                throw new Error("invalid tags");
 
               case 13:
                 dest = "".concat(userDirectory, "/").concat(userId, "/expenses");
@@ -125,11 +125,11 @@ var ExpenseSchema = /*#__PURE__*/function () {
                 return _context2.abrupt("return", []);
 
               case 3:
-                x = readdirSync("".concat(userDirectory, "/").concat(_id, "/expenses")).reduce(function (acc, cur, i) {
-                  return acc + "".concat(i == 0 ? '' : ',') + (0, _fs.readFileSync)(_path["default"].join("".concat(userDirectory, "/").concat(_id, "/expenses"), "/".concat(cur)), {
+                x = (0, _fs.readdirSync)("".concat(userDirectory, "/").concat(_id, "/expenses")).reduce(function (acc, cur, i) {
+                  return acc + "".concat(i == 0 ? "" : ",") + (0, _fs.readFileSync)(_path["default"].join("".concat(userDirectory, "/").concat(_id, "/expenses"), "/".concat(cur)), {
                     encoding: "utf8"
                   });
-                }, '[');
+                }, "[");
                 y = "".concat(x, "]");
                 result = JSON.parse(y);
                 return _context2.abrupt("return", result);

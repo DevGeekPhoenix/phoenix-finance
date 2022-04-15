@@ -6,7 +6,6 @@ import {
   Avatar,
   Box,
   Card,
-  Checkbox,
   Table,
   TableBody,
   TableCell,
@@ -16,8 +15,11 @@ import {
   Typography,
 } from "@mui/material";
 import { getInitials } from "../../utils/get-initials";
+import { useSelector } from "react-redux";
 
 export const CustomerListResults = ({ customers, ...rest }) => {
+  const userData = useSelector((state) => state.data.userData);
+
   const [selectedCustomerIds, setSelectedCustomerIds] = useState([]);
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(0);
@@ -69,22 +71,16 @@ export const CustomerListResults = ({ customers, ...rest }) => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell padding="checkbox"></TableCell>
-                <TableCell>Name</TableCell>
-                <TableCell>Email</TableCell>
+                <TableCell>Amount</TableCell>
+
                 <TableCell>Location</TableCell>
                 <TableCell>Phone</TableCell>
                 <TableCell>Registration date</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {customers.slice(0, limit).map((customer) => (
-                <TableRow
-                  hover
-                  key={customer.id}
-                  selected={selectedCustomerIds.indexOf(customer.id) !== -1}
-                >
-                  <TableCell padding="checkbox"></TableCell>
+              {userData?.myExpenses.slice(0, limit).map((Expense) => (
+                <TableRow hover key={Expense._id}>
                   <TableCell>
                     <Box
                       sx={{
@@ -92,20 +88,23 @@ export const CustomerListResults = ({ customers, ...rest }) => {
                         display: "flex",
                       }}
                     >
-                      <Avatar src={customer.avatarUrl} sx={{ mr: 2 }}>
-                        {getInitials(customer.name)}
-                      </Avatar>
                       <Typography color="textPrimary" variant="body1">
-                        {customer.name}
+                        {Expense.amount}
                       </Typography>
                     </Box>
                   </TableCell>
-                  <TableCell>{customer.email}</TableCell>
+
                   <TableCell>
-                    {`${customer.address.city}, ${customer.address.state}, ${customer.address.country}`}
+                    <a
+                      target={"_blank"}
+                      href={`http://maps.googleapis.com/maps/api/geocode/json?latlng=${Expense.geo.lat},${Expense.geo.lon}&sensor=true
+`}
+                    >
+                      Show Address
+                    </a>
                   </TableCell>
-                  <TableCell>{customer.phone}</TableCell>
-                  <TableCell>{format(customer.createdAt, "dd/MM/yyyy")}</TableCell>
+                  <TableCell>{Expense?.phone}</TableCell>
+                  {/* <TableCell>{format(Expense?.createdAt, "dd/MM/yyyy")}</TableCell> */}
                 </TableRow>
               ))}
             </TableBody>
@@ -114,7 +113,7 @@ export const CustomerListResults = ({ customers, ...rest }) => {
       </PerfectScrollbar>
       <TablePagination
         component="div"
-        count={customers.length}
+        // count={Expenses.length}
         onPageChange={handlePageChange}
         onRowsPerPageChange={handleLimitChange}
         page={page}
