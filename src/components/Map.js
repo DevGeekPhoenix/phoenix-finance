@@ -12,6 +12,12 @@ export default ({ position, setPosition }) => {
     const map = useMap();
 
     useEffect(() => {
+      if (map) {
+        map.invalidateSize();
+      }
+    }, [map]);
+
+    useEffect(() => {
       const provider = new OpenStreetMapProvider();
 
       const searchControl = new GeoSearchControl({
@@ -22,9 +28,10 @@ export default ({ position, setPosition }) => {
           icon: new L.Icon.Default(),
           draggable: true,
         },
+
         popupFormat: ({ query, result }) => result.label,
         resultFormat: ({ result }) => result.label,
-        maxMarkers: 1,
+        maxMarkers: 0,
         retainZoomLevel: false,
         animateZoom: true,
         autoClose: false,
@@ -32,6 +39,7 @@ export default ({ position, setPosition }) => {
         keepResult: false,
         updateMap: true,
       }).addTo(map);
+
       map.on("geosearch/showlocation", (e) => {
         setPosition([e.location.x, e.location.y]);
       });
@@ -49,10 +57,10 @@ export default ({ position, setPosition }) => {
   };
 
   return (
-    <MapContainer center={position} zoom={10} scrollWheelZoom={true}>
+    <MapContainer markerZoomAnimation={true} center={position} zoom={10} scrollWheelZoom={true}>
       <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        url={`https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiaGF3amhvM2VpbiIsImEiOiJjbDIxZzA0bmMxNTU0M2ltdGwybXNjMG1tIn0.UqL8JacAnkRK7hHESGc1dg`}
+        attribution='Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery &copy; <a href="https://www.mapbox.com/">Mapbox</a>'
       />
       <LeafletgeoSearch />
     </MapContainer>

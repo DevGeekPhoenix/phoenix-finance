@@ -8,20 +8,66 @@ import {
   Grid,
   TextField,
 } from "@mui/material";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { useState, useEffect } from "react";
-import { setUserData } from "../../Redux/Reducer";
+import { useMutation, gql, useQuery } from "@apollo/client";
 
-export const AccountProfileDetails = (props) => {
+const editUser = gql`
+  mutation EditMe($name: String!, $img: Upload) {
+    editMe(name: $name, img: $img) {
+      status
+      msg
+    }
+  }
+`;
+
+export const AccountProfileDetails = ({ setpreview }) => {
   const userData = useSelector((state) => state.data.userData);
 
-  const [name, setName] = useState(userData?.name);
-  const [img, setimg] = useState(userData?.img);
+  const [submitEditUser] = useMutation(editUser);
 
-  const dispatch = useDispatch();
+  const [name, setName] = useState("");
+  const [img, setimg] = useState(null);
+
+  useEffect(() => {
+    setName(userData?.name);
+  }, [userData]);
+
+  useEffect(() => {
+    if (img) {
+      const fileReader = new FileReader();
+
+      fileReader.onload = async function (fileLoadedEvent) {
+        setpreview(fileLoadedEvent.target.result);
+      };
+      fileReader.readAsDataURL(img);
+    }
+  }, [img]);
+
+  console.log(img);
+
+  const handleEditUser = async () => {
+    try {
+      const {
+        data: {
+          editMe: { status },
+        },
+      } = await submitEditUser({
+        variables: {
+          name: name,
+          img: img,
+        },
+      });
+
+      // console.log(data);
+      if (status === 200) alert("eas");
+    } catch (error) {
+      alert(error);
+    }
+  };
 
   return (
-    <form autoComplete="off" noValidate {...props}>
+    <form autoComplete="off" noValidate>
       <Card>
         <CardHeader subheader="The information can be edited" title="Profile" />
         <Divider />
@@ -42,11 +88,11 @@ export const AccountProfileDetails = (props) => {
             <Grid item md={6} xs={12}>
               <TextField
                 fullWidth
-                label="Profile ImgUrl"
+                label=""
                 name="ProfileImgUrl"
-                onChange={(e) => setimg(e.target.value)}
+                onChange={(e) => setimg(e.target.files[0])}
                 required
-                value={img}
+                type="file"
                 variant="outlined"
               />
             </Grid>
@@ -60,7 +106,7 @@ export const AccountProfileDetails = (props) => {
             p: 2,
           }}
         >
-          <Button color="primary" variant="contained">
+          <Button onClick={() => handleEditUser()} color="primary" variant="contained">
             Save details
           </Button>
         </Box>

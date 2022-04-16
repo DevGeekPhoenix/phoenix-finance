@@ -137,10 +137,9 @@ var ExpenseSchema = /*#__PURE__*/function () {
               case 9:
                 _context2.prev = 9;
                 _context2.t0 = _context2["catch"](0);
-                console.log(_context2.t0);
                 throw _context2.t0;
 
-              case 13:
+              case 12:
               case "end":
                 return _context2.stop();
             }

@@ -24,34 +24,31 @@ function _requireAuth() {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            console.log(' useruseruseruser : ', user);
-
             if (!(!user || !user._id)) {
-              _context.next = 3;
+              _context.next = 2;
               break;
             }
 
-            throw new Error('Unathorized');
+            throw new Error("Unathorized");
 
-          case 3:
-            _context.next = 5;
+          case 2:
+            _context.next = 4;
             return _user["default"].findById(user._id);
 
-          case 5:
+          case 4:
             me = _context.sent;
-            console.log('me : ', me);
 
             if (me) {
-              _context.next = 9;
+              _context.next = 7;
               break;
             }
 
-            throw new Error('Unauthorized');
+            throw new Error("Unauthorized");
 
-          case 9:
+          case 7:
             return _context.abrupt("return", me);
 
-          case 10:
+          case 8:
           case "end":
             return _context.stop();
         }

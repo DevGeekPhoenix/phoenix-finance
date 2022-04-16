@@ -1,3 +1,5 @@
+
+
 type Expense {
   _id: ID!
   amount: Float!
@@ -16,3 +18,4 @@ input ExpenseInfo {
 type Mutation {
   create_expense(data: ExpenseInfo!): Status!
 }
+

@@ -18,11 +18,7 @@ type Query {
 }
 
 type Mutation {
-  signup(
-    name: String!
-    username: String!
-    img: String!
-    password: String!
-  ): Token!
+  signup(name: String!, username: String!, password: String!): Token!
   login(username: String!, password: String!): Token!
+  editMe(name: String!, img: Upload): Status!
 }

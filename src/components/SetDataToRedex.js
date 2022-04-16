@@ -28,6 +28,7 @@ const getUser = gql`
           lat
           lon
         }
+        date
       }
     }
   }
@@ -39,7 +40,6 @@ export default () => {
   const token = cookies.get("ut");
   const { data, refetch } = useQuery(getUser);
   useEffect(() => {
-    refetch();
     dispatch(setUserData(data?.me));
     console.log("data is changed");
   }, [data]);

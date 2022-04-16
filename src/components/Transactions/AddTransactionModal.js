@@ -72,16 +72,8 @@ export default ({ setIsTransitionModalOpen, isTransitionModalOpen }) => {
   const [tagId, settagId] = useState([]);
   const [position, setPosition] = useState([35.6892, 51.389]);
 
-  const { refetch } = useQuery(getUser);
+  const { data, refetch } = useQuery(getUser);
   const [submitAddExpense] = useMutation(addExpense);
-
-  const day = dateValue.getDate();
-  const month = dateValue.getMonth() + 1;
-  const year = dateValue.getFullYear();
-  const hour = new Date().getHours();
-  const minute = new Date().getMinutes();
-  const second = new Date().getSeconds();
-  const date = `${year}` + `${month}` + `${day}` + `${hour}` + `${minute}` + `${second}`;
 
   const handleAddExpense = async () => {
     try {
@@ -93,7 +85,7 @@ export default ({ setIsTransitionModalOpen, isTransitionModalOpen }) => {
             amount: Number(amount),
 
             tags: tagId,
-            date: Number(date),
+            date: new Date(dateValue).toISOString(),
             geo: {
               lat: Number(position[0]),
               lon: Number(position[1]),
@@ -206,6 +198,7 @@ export default ({ setIsTransitionModalOpen, isTransitionModalOpen }) => {
                       {userData?.myTags.map((tag, i) => {
                         return (
                           <div
+                            key={i}
                             onClick={() => settagId([tag._id])}
                             style={{
                               backgroundColor: `${tag.color}`,

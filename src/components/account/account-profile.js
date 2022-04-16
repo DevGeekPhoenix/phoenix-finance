@@ -8,13 +8,13 @@ import {
   Divider,
   Typography,
 } from "@mui/material";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
-export const AccountProfile = (props) => {
+export const AccountProfile = ({ preview }) => {
   const userData = useSelector((state) => state.data.userData);
-
+  console.log(preview);
   return (
-    <Card {...props}>
+    <Card>
       <CardContent>
         <Box
           sx={{
@@ -24,7 +24,7 @@ export const AccountProfile = (props) => {
           }}
         >
           <Avatar
-            src={userData?.img}
+            src={preview}
             sx={{
               height: 120,
               mb: 2,

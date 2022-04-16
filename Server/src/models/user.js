@@ -25,9 +25,9 @@ const userDirectory = path.join(process.cwd(), "/src/db/users");
 class UserSchema {
   constructor() {}
 
-  async create({ name, username, password, img }) {
+  async create({ name, username, password }) {
     try {
-      if (!name || !username || !password || !img) throw new Error("bad input");
+      if (!name || !username || !password) throw new Error("bad input");
 
       const allUsers = await this.findAll();
 
@@ -38,7 +38,7 @@ class UserSchema {
       const salt = genSaltSync(9);
       const hash = hashSync(password, salt);
       const userID = UID();
-      const userInfo = { name, username, img, _id: userID, password: hash };
+      const userInfo = { name, username, _id: userID, password: hash };
 
       const data = JSON.stringify(userInfo);
 
@@ -53,7 +53,6 @@ class UserSchema {
 
       return userInfo;
     } catch (error) {
-      console.log(error);
       throw error;
     }
   }
@@ -99,9 +98,9 @@ class UserSchema {
     }
   }
 
-  async signup({ name, username, password, img }) {
+  async signup({ name, username, password }) {
     try {
-      const thisUser = await this.create({ name, username, img, password });
+      const thisUser = await this.create({ name, username, password });
 
       return this.createToken(thisUser._id);
     } catch (error) {
@@ -136,15 +135,23 @@ class UserSchema {
   }
 
   async findByIdAndUpdate(_id, data) {
+    console.log(data);
     try {
       const thisUser = await this.findById(_id);
 
       Object.entries(data).forEach(([key, value]) => (thisUser[key] = value));
 
-      const dest = `${userDirectory}/${thisUser._id}/info.txt`;
+      console.log("2");
+      const dest = path.join(
+        process.cwd(),
+        `/src/db/users/${thisUser._id}/info.txt`
+      );
 
-      writeFileSync(dest, thisUser, "utf8");
+      console.log("3");
 
+      writeFileSync(dest, JSON.stringify(thisUser), "utf8");
+
+      console.log("whaaaaaaaaaaaat");
       return true;
     } catch (error) {
       throw error;

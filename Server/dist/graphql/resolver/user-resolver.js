@@ -15,7 +15,15 @@ var _user = _interopRequireDefault(require("../../models/user"));
 
 var _tag = _interopRequireDefault(require("../../models/tag"));
 
+var _fs = require("fs");
+
+var _path = _interopRequireDefault(require("path"));
+
 var _auth = _interopRequireDefault(require("../../lib/auth"));
+
+var _promises = require("stream/promises");
+
+_path["default"].join(process.cwd(), "/src/db/users");
 
 var _default = {
   root: {},
@@ -129,6 +137,87 @@ var _default = {
       }
 
       return login;
+    }(),
+    editMe: function () {
+      var _editMe = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee4(_, _ref2, _ref3) {
+        var name, img, user, thisuser, _yield$img, createReadStream, mimetype, wtf, stream, out;
+
+        return _regenerator["default"].wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                name = _ref2.name, img = _ref2.img;
+                user = _ref3.user;
+                console.log("************");
+                console.log(img);
+                console.log(name);
+                _context4.prev = 5;
+                _context4.next = 8;
+                return (0, _auth["default"])(user);
+
+              case 8:
+                thisuser = _context4.sent;
+
+                if (!img) {
+                  _context4.next = 23;
+                  break;
+                }
+
+                _context4.next = 12;
+                return img;
+
+              case 12:
+                _yield$img = _context4.sent;
+                createReadStream = _yield$img.createReadStream;
+                mimetype = _yield$img.mimetype;
+                wtf = mimetype.split("/")[1];
+
+                if (!(wtf !== "jpeg" && wtf !== "jpg" && wtf !== "png")) {
+                  _context4.next = 18;
+                  break;
+                }
+
+                throw new Error("bad request: Invalid file type");
+
+              case 18:
+                stream = createReadStream(); // await storeImageUpload({ stream, userId: thisuser._id });
+
+                out = (0, _fs.createWriteStream)(_path["default"].join(process.cwd(), "/src/db/users/".concat(thisuser._id, "/profile.").concat(wtf)));
+                stream.pipe(out);
+                _context4.next = 23;
+                return (0, _promises.finished)(out);
+
+              case 23:
+                console.log("salamasadsad");
+                _context4.next = 26;
+                return _user["default"].findByIdAndUpdate(thisuser._id, {
+                  name: name
+                });
+
+              case 26:
+                return _context4.abrupt("return", {
+                  status: 200,
+                  msg: "ok!"
+                });
+
+              case 29:
+                _context4.prev = 29;
+                _context4.t0 = _context4["catch"](5);
+                throw _context4.t0;
+
+              case 32:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4, null, [[5, 29]]);
+      }));
+
+      function editMe(_x8, _x9, _x10) {
+        return _editMe.apply(this, arguments);
+      }
+
+      return editMe;
     }()
   }
 };

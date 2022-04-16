@@ -43,15 +43,15 @@ var UserSchema = /*#__PURE__*/function () {
     key: "create",
     value: function () {
       var _create = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(_ref) {
-        var name, username, password, img, allUsers, ifuserexists, salt, hash, userID, userInfo, data, dest;
+        var name, username, password, allUsers, ifuserexists, salt, hash, userID, userInfo, data, dest;
         return _regenerator["default"].wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                name = _ref.name, username = _ref.username, password = _ref.password, img = _ref.img;
+                name = _ref.name, username = _ref.username, password = _ref.password;
                 _context.prev = 1;
 
-                if (!(!name || !username || !password || !img)) {
+                if (!(!name || !username || !password)) {
                   _context.next = 4;
                   break;
                 }
@@ -82,7 +82,6 @@ var UserSchema = /*#__PURE__*/function () {
                 userInfo = {
                   name: name,
                   username: username,
-                  img: img,
                   _id: userID,
                   password: hash
                 };
@@ -100,10 +99,9 @@ var UserSchema = /*#__PURE__*/function () {
               case 22:
                 _context.prev = 22;
                 _context.t0 = _context["catch"](1);
-                console.log(_context.t0);
                 throw _context.t0;
 
-              case 26:
+              case 25:
               case "end":
                 return _context.stop();
             }
@@ -206,18 +204,17 @@ var UserSchema = /*#__PURE__*/function () {
     key: "signup",
     value: function () {
       var _signup = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee4(_ref2) {
-        var name, username, password, img, thisUser;
+        var name, username, password, thisUser;
         return _regenerator["default"].wrap(function _callee4$(_context4) {
           while (1) {
             switch (_context4.prev = _context4.next) {
               case 0:
-                name = _ref2.name, username = _ref2.username, password = _ref2.password, img = _ref2.img;
+                name = _ref2.name, username = _ref2.username, password = _ref2.password;
                 _context4.prev = 1;
                 _context4.next = 4;
                 return this.create({
                   name: name,
                   username: username,
-                  img: img,
                   password: password
                 });
 
@@ -316,11 +313,12 @@ var UserSchema = /*#__PURE__*/function () {
           while (1) {
             switch (_context6.prev = _context6.next) {
               case 0:
-                _context6.prev = 0;
-                _context6.next = 3;
+                console.log(data);
+                _context6.prev = 1;
+                _context6.next = 4;
                 return this.findById(_id);
 
-              case 3:
+              case 4:
                 thisUser = _context6.sent;
                 Object.entries(data).forEach(function (_ref4) {
                   var _ref5 = (0, _slicedToArray2["default"])(_ref4, 2),
@@ -329,21 +327,24 @@ var UserSchema = /*#__PURE__*/function () {
 
                   return thisUser[key] = value;
                 });
-                dest = "".concat(userDirectory, "/").concat(thisUser._id, "/info.txt");
-                (0, _fs.writeFileSync)(dest, thisUser, "utf8");
+                console.log("2");
+                dest = _path["default"].join(process.cwd(), "/src/db/users/".concat(thisUser._id, "/info.txt"));
+                console.log("3");
+                (0, _fs.writeFileSync)(dest, JSON.stringify(thisUser), "utf8");
+                console.log("whaaaaaaaaaaaat");
                 return _context6.abrupt("return", true);
 
-              case 10:
-                _context6.prev = 10;
-                _context6.t0 = _context6["catch"](0);
+              case 14:
+                _context6.prev = 14;
+                _context6.t0 = _context6["catch"](1);
                 throw _context6.t0;
 
-              case 13:
+              case 17:
               case "end":
                 return _context6.stop();
             }
           }
-        }, _callee6, this, [[0, 10]]);
+        }, _callee6, this, [[1, 14]]);
       }));
 
       function findByIdAndUpdate(_x5, _x6) {

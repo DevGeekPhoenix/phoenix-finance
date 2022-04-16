@@ -1,5 +1,6 @@
 import React, { useMemo, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { createUploadLink } from "apollo-upload-client";
 
 import {
   ApolloClient,
@@ -44,7 +45,7 @@ export default function CustomApolloProvider(props) {
       }
     });
 
-    const httpLink = createHttpLink({
+    const httpLink = createUploadLink({
       uri: graphqlEndpoint,
     });
 

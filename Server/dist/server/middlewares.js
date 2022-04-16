@@ -13,6 +13,8 @@ var _asyncToGenerator2 = _interopRequireDefault(require("@babel/runtime/helpers/
 
 var _jsonwebtoken = _interopRequireDefault(require("jsonwebtoken"));
 
+var _graphqlUpload = require("graphql-upload");
+
 function decodeToken(_x) {
   return _decodeToken.apply(this, arguments);
 }
@@ -24,26 +26,25 @@ function _decodeToken() {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            arr = token.split(' ');
+            arr = token.split(" ");
             _context.prev = 1;
 
-            if (!(arr[0] === 'ut')) {
+            if (!(arr[0] === "ut")) {
               _context.next = 4;
               break;
             }
 
-            return _context.abrupt("return", _jsonwebtoken["default"].verify(arr[1], 'SECRET'));
+            return _context.abrupt("return", _jsonwebtoken["default"].verify(arr[1], "SECRET"));
 
           case 4:
-            throw new Error('Please Re-Sign In');
+            throw new Error("Please Re-Sign In");
 
           case 7:
             _context.prev = 7;
             _context.t0 = _context["catch"](1);
-            console.log(_context.t0);
             throw _context.t0;
 
-          case 11:
+          case 10:
           case "end":
             return _context.stop();
         }
@@ -103,10 +104,8 @@ function _auth() {
 }
 
 var _default = function _default(app) {
-  app.use(auth); // app.use((req, res, next) => {
-  //   // console.log('req.user : ', req.user)
-  //   next()
-  // })
+  app.use(auth);
+  app.use((0, _graphqlUpload.graphqlUploadExpress)());
 };
 
 exports["default"] = _default;

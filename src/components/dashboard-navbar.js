@@ -19,6 +19,9 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { useQuery, gql } from "@apollo/client";
 import { useSelector, useDispatch } from "react-redux";
 import { useState, useEffect } from "react";
+import constants from "../config/constants";
+
+const { domain } = constants;
 
 const DashboardNavbarRoot = styled(AppBar)(({ theme }) => ({
   backgroundColor: theme.palette.background.paper,
@@ -104,7 +107,7 @@ export const DashboardNavbar = (props) => {
               ml: 1,
               boxShadow: "0px 5px 5px #888888",
             }}
-            src={userData?.img}
+            src={userData?.img ? `${domain}/${userData?.img}` : ""}
           >
             <UserCircleIcon fontSize="small" />
           </Avatar>

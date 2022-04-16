@@ -1,5 +1,5 @@
-
 scalar Date
+scalar Upload
 
 type Token {
   token: String!

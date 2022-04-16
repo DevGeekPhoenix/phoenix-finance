@@ -1,4 +1,10 @@
-import { writeFileSync, existsSync, mkdirSync, readFileSync, readdirSync } from "fs";
+import {
+  writeFileSync,
+  existsSync,
+  mkdirSync,
+  readFileSync,
+  readdirSync,
+} from "fs";
 import path from "path";
 
 import { UID } from "../lib";
@@ -12,7 +18,15 @@ class ExpenseSchema {
 
   async create({ amount, tags, geo, userId, date }) {
     try {
-      if (!amount || !tags || !Array.isArray(tags) || !geo || !geo.lat || !geo.lon || !userId)
+      if (
+        !amount ||
+        !tags ||
+        !Array.isArray(tags) ||
+        !geo ||
+        !geo.lat ||
+        !geo.lon ||
+        !userId
+      )
         throw new Error("bad input");
       const data = { amount, tags, geo, date, _id: UID() };
 
@@ -48,9 +62,10 @@ class ExpenseSchema {
         (acc, cur, i) =>
           acc +
           `${i == 0 ? "" : ","}` +
-          readFileSync(path.join(`${userDirectory}/${_id}/expenses`, `/${cur}`), {
-            encoding: "utf8",
-          }),
+          readFileSync(
+            path.join(`${userDirectory}/${_id}/expenses`, `/${cur}`),
+            { encoding: "utf8" }
+          ),
         "["
       );
       const y = `${x}]`;
@@ -59,16 +74,16 @@ class ExpenseSchema {
 
       return result;
     } catch (error) {
-      console.log(error);
       throw error;
     }
   }
 
   async findById({ _id, userId }) {
     try {
-      const x = readFileSync(path.join(userDirectory, `/${userId}/expenses/${_id}.txt`), {
-        encoding: "utf8",
-      });
+      const x = readFileSync(
+        path.join(userDirectory, `/${userId}/expenses/${_id}.txt`),
+        { encoding: "utf8" }
+      );
 
       return JSON.parse(x);
     } catch (error) {
