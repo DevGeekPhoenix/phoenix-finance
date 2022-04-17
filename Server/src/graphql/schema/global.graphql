@@ -10,6 +10,20 @@ type Status {
   msg: String!
 }
 
+type Address {
+  MunicipalityZone: Float!
+  Neighbourhood: String
+  FormattedAddress: String!
+  Place: String
+}
+
+input AddressInput {
+  MunicipalityZone: Float!
+  Neighbourhood: String
+  FormattedAddress: String!
+  Place: String
+}
+
 type Geo {
   lat: Float!
   lon: Float!

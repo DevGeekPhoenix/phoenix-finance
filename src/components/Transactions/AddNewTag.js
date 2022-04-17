@@ -10,8 +10,9 @@ import {
   Container,
   Typography,
 } from "@mui/material";
-import { useMutation, gql, useQuery } from "@apollo/client";
+import { useMutation, gql } from "@apollo/client";
 import { SketchPicker } from "react-color";
+import { useSelector } from "react-redux";
 
 const addTag = gql`
   mutation Create_expense($data: tagInfo!) {
@@ -21,37 +22,10 @@ const addTag = gql`
     }
   }
 `;
-const getUser = gql`
-  query Query {
-    me {
-      name
-      img
-      _id
-      username
-      myTags {
-        _id
-        name
-        color
-      }
-      myExpenses {
-        _id
-        amount
-        tags {
-          _id
-          name
-          color
-        }
-        geo {
-          lat
-          lon
-        }
-      }
-    }
-  }
-`;
 
 export default ({ setisAddNewTagModalOpen, isAddNewTagModalOpen }) => {
-  const { refetch } = useQuery(getUser);
+  const reFetch = useSelector((state) => state.data.refetch);
+
   const [submitAddTag] = useMutation(addTag);
 
   const [tagName, settagName] = useState("");
@@ -134,7 +108,7 @@ export default ({ setisAddNewTagModalOpen, isAddNewTagModalOpen }) => {
                       <Button
                         onClick={() => {
                           handleAddTag();
-                          refetch();
+                          reFetch();
                           setisAddNewTagModalOpen(false);
                         }}
                         sx={{ height: "55px" }}

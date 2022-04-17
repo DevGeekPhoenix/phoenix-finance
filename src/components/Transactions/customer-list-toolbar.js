@@ -12,7 +12,12 @@ import { Search as SearchIcon } from "../../icons/search";
 import { useState } from "react";
 import AddTransactionModal from "./AddTransactionModal";
 
-export const CustomerListToolbar = (props) => {
+export const CustomerListToolbar = ({
+  filteredExpenses,
+  setfilteredExpenses,
+  searchTransaction,
+  setsearchTransaction,
+}) => {
   const [isTransitionModalOpen, setIsTransitionModalOpen] = useState(false);
 
   return (
@@ -23,7 +28,7 @@ export const CustomerListToolbar = (props) => {
           isTransitionModalOpen={isTransitionModalOpen}
         />
       </div>
-      <Box {...props}>
+      <Box>
         <Box
           sx={{
             alignItems: "center",
@@ -52,6 +57,8 @@ export const CustomerListToolbar = (props) => {
               <Box sx={{ maxWidth: 900 }}>
                 <TextField
                   fullWidth
+                  value={searchTransaction}
+                  onChange={(e) => setsearchTransaction(e.target.value)}
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">

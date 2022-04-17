@@ -3,7 +3,6 @@ import PerfectScrollbar from "react-perfect-scrollbar";
 import PropTypes from "prop-types";
 import GoogleIcon from "@mui/icons-material/Google";
 import {
-  Avatar,
   Box,
   Card,
   Table,
@@ -15,46 +14,14 @@ import {
   Typography,
 } from "@mui/material";
 import { getInitials } from "../../utils/get-initials";
-import { useSelector } from "react-redux";
 
-export const CustomerListResults = ({ customers, ...rest }) => {
-  const userData = useSelector((state) => state.data.userData);
-
-  const [selectedCustomerIds, setSelectedCustomerIds] = useState([]);
-  const [limit, setLimit] = useState(10);
+export const CustomerListResults = ({
+  filteredExpenses,
+  setfilteredExpenses,
+  searchTransaction,
+}) => {
+  const [limit, setLimit] = useState(5);
   const [page, setPage] = useState(0);
-
-  const handleSelectAll = (event) => {
-    let newSelectedCustomerIds;
-
-    if (event.target.checked) {
-      newSelectedCustomerIds = customers.map((customer) => customer.id);
-    } else {
-      newSelectedCustomerIds = [];
-    }
-
-    setSelectedCustomerIds(newSelectedCustomerIds);
-  };
-
-  const handleSelectOne = (event, id) => {
-    const selectedIndex = selectedCustomerIds.indexOf(id);
-    let newSelectedCustomerIds = [];
-
-    if (selectedIndex === -1) {
-      newSelectedCustomerIds = newSelectedCustomerIds.concat(selectedCustomerIds, id);
-    } else if (selectedIndex === 0) {
-      newSelectedCustomerIds = newSelectedCustomerIds.concat(selectedCustomerIds.slice(1));
-    } else if (selectedIndex === selectedCustomerIds.length - 1) {
-      newSelectedCustomerIds = newSelectedCustomerIds.concat(selectedCustomerIds.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelectedCustomerIds = newSelectedCustomerIds.concat(
-        selectedCustomerIds.slice(0, selectedIndex),
-        selectedCustomerIds.slice(selectedIndex + 1)
-      );
-    }
-
-    setSelectedCustomerIds(newSelectedCustomerIds);
-  };
 
   const handleLimitChange = (event) => {
     setLimit(event.target.value);
@@ -64,70 +31,77 @@ export const CustomerListResults = ({ customers, ...rest }) => {
     setPage(newPage);
   };
 
-  const handle = () => {
-    fetch(
-      `https://api.neshan.org/v4/reverse?lat=${userData?.myExpenses[0].geo.lon}&lng=${userData?.myExpenses[0].geo.lat}`,
-      {
-        headers: {
-          "Api-Key": "service.IoJuxHt4xVr9xKK01aw0AjeiUYvbnL79DNZF2Nvt",
-        },
-      }
-    )
-      .then((response) => response.json())
-      .then((data) => console.log(data));
-  };
-
   return (
-    <Card {...rest}>
+    <Card>
       <PerfectScrollbar>
-        <Box sx={{ minWidth: 900 }}>
-          <button onClick={handle}>Fuck You NESHAN</button>
+        <Box>
           <Table>
             <TableHead>
               <TableRow>
                 <TableCell>Amount</TableCell>
-                <TableCell>Location</TableCell>
-                <TableCell>Phone</TableCell>
-                <TableCell>Registration date</TableCell>
+                <TableCell>Date</TableCell>
+                <TableCell>Address</TableCell>
+                <TableCell>Place</TableCell>
+                <TableCell>Tag</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {userData?.myExpenses.slice(0, limit).map((Expense) => {
-                return (
-                  <TableRow hover key={Expense._id}>
-                    <TableCell>
-                      <Box
+              {filteredExpenses?.myExpenses
+                .filter((expense) => {
+                  console.log();
+                  return (
+                    expense.tags[0].name.toLowerCase().includes(searchTransaction.toLowerCase()) ||
+                    expense.address.Neighbourhood.toLowerCase().includes(
+                      searchTransaction.toLowerCase()
+                    ) ||
+                    `${expense.amount}`.includes(searchTransaction.toLowerCase()) ||
+                    expense.address.Place.toLowerCase().includes(searchTransaction.toLowerCase())
+                  );
+                })
+
+                .map((Expense) => {
+                  const date = Expense.date.split("-");
+
+                  return (
+                    <TableRow hover key={Expense._id}>
+                      <TableCell>
+                        <Box
+                          sx={{
+                            alignItems: "center",
+                            display: "flex",
+                          }}
+                        >
+                          <Typography color="textPrimary" variant="body1">
+                            {Expense.amount} Toman
+                          </Typography>
+                        </Box>
+                      </TableCell>
+                      <TableCell>
+                        <Typography color="textPrimary" variant="body1">
+                          {date[2].substr(0, 2) + "/" + date[1] + "/" + date[0]}
+                        </Typography>
+                      </TableCell>
+                      <TableCell>{Expense.address.Neighbourhood}</TableCell>
+                      <TableCell>{Expense.address.Place}</TableCell>
+                      <TableCell
                         sx={{
-                          alignItems: "center",
-                          display: "flex",
+                          backgroundColor: `${Expense.tags[0].color}`,
+                          borderRadius: "15px",
+                          fontWeight: "bold",
                         }}
                       >
-                        <Typography color="textPrimary" variant="body1">
-                          {Expense.amount} Toman
-                        </Typography>
-                      </Box>
-                    </TableCell>
-
-                    <TableCell>
-                      <a
-                        target={"_blank"}
-                        href={`https://maps.google.com/?q=${Expense.geo.lon},${Expense.geo.lat}`}
-                      >
-                        Show Address
-                      </a>
-                    </TableCell>
-                    <TableCell>{Expense?.phone}</TableCell>
-                    {/* <TableCell>{format(Expense?.createdAt, "dd/MM/yyyy")}</TableCell> */}
-                  </TableRow>
-                );
-              })}
+                        {Expense.tags[0].name.toUpperCase()}
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
             </TableBody>
           </Table>
         </Box>
       </PerfectScrollbar>
       <TablePagination
         component="div"
-        // count={Expenses.length}
+        count={filteredExpenses?.myExpenses.length}
         onPageChange={handlePageChange}
         onRowsPerPageChange={handleLimitChange}
         page={page}

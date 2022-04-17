@@ -1,6 +1,6 @@
 import Cookies from "universal-cookie";
-import { setUserData, setUserToken } from "../Redux/Reducer";
-import { useSelector, useDispatch } from "react-redux";
+import { setUserData, setUserToken, setRefetch } from "../Redux/Reducer";
+import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { useQuery, gql } from "@apollo/client";
 
@@ -28,6 +28,12 @@ const getUser = gql`
           lat
           lon
         }
+        address {
+          MunicipalityZone
+          Neighbourhood
+          FormattedAddress
+          Place
+        }
         date
       }
     }
@@ -41,6 +47,7 @@ export default () => {
   const { data, refetch } = useQuery(getUser);
   useEffect(() => {
     dispatch(setUserData(data?.me));
+    dispatch(setRefetch(refetch));
     console.log("data is changed");
   }, [data]);
   useEffect(() => {

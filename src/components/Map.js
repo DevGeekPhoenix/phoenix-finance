@@ -45,7 +45,7 @@ export default ({ position, setPosition }) => {
       });
 
       map.on("geosearch/marker/dragend", (e) => {
-        setPosition([e.location.lat, e.location.lng]);
+        setPosition([e.location.lng, e.location.lat]);
       });
 
       map.addControl(searchControl);

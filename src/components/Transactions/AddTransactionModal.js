@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Box,
   Button,
@@ -11,7 +11,7 @@ import {
   Container,
   Typography,
 } from "@mui/material";
-import { useMutation, gql, useQuery } from "@apollo/client";
+import { useMutation, gql } from "@apollo/client";
 import AddNewTag from "./AddNewTag";
 import { useSelector } from "react-redux";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -34,45 +34,40 @@ const addExpense = gql`
   }
 `;
 
-const getUser = gql`
-  query Query {
-    me {
-      name
-      img
-      _id
-      username
-      myTags {
-        _id
-        name
-        color
-      }
-      myExpenses {
-        _id
-        amount
-        tags {
-          _id
-          name
-          color
-        }
-        geo {
-          lat
-          lon
-        }
-      }
-    }
-  }
-`;
-
 export default ({ setIsTransitionModalOpen, isTransitionModalOpen }) => {
   const userData = useSelector((state) => state.data.userData);
+  const reFetch = useSelector((state) => state.data.refetch);
 
   const [isAddNewTagModalOpen, setisAddNewTagModalOpen] = useState(false);
   const [dateValue, setdateValue] = useState(new Date());
   const [amount, setamount] = useState("");
   const [tagId, settagId] = useState([]);
   const [position, setPosition] = useState([35.6892, 51.389]);
+  const [neighbourhood, setNeighbourhood] = useState("");
+  const [place, setPlace] = useState("");
+  const [address, setaddress] = useState("");
+  const [municipalityZone, setmunicipalityZone] = useState(0);
 
-  const { data, refetch } = useQuery(getUser);
+  try {
+    useEffect(() => {
+      fetch(`https://api.neshan.org/v4/reverse?lat=${position[1]}&lng=${position[0]}`, {
+        headers: {
+          "Api-Key": "service.IoJuxHt4xVr9xKK01aw0AjeiUYvbnL79DNZF2Nvt",
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          setaddress(data.formatted_address ? data.formatted_address : "-");
+          setmunicipalityZone(data.municipality_zone ? data.municipality_zone : "-");
+          setNeighbourhood(data.neighbourhood ? data.neighbourhood : "-");
+          setPlace(data.place ? data.place : "-");
+          console.log(data);
+        });
+    }, [position]);
+  } catch (error) {
+    alert("Something Went Wrong!!! Try Again");
+  }
+
   const [submitAddExpense] = useMutation(addExpense);
 
   const handleAddExpense = async () => {
@@ -83,18 +78,24 @@ export default ({ setIsTransitionModalOpen, isTransitionModalOpen }) => {
         variables: {
           data: {
             amount: Number(amount),
-
             tags: tagId,
-            date: new Date(dateValue).toISOString(),
             geo: {
               lat: Number(position[0]),
               lon: Number(position[1]),
             },
+            address: {
+              MunicipalityZone: Number(municipalityZone),
+              Neighbourhood: neighbourhood,
+              FormattedAddress: address,
+              Place: place,
+            },
+            date: dateValue.toISOString(),
           },
         },
       });
     } catch (error) {
       alert(error);
+      setIsTransitionModalOpen(false);
     }
   };
 
@@ -216,7 +217,7 @@ export default ({ setIsTransitionModalOpen, isTransitionModalOpen }) => {
                               marginRight: 2,
                             }}
                           >
-                            {tag.name}
+                            {tag.name.toUpperCase()}
                           </div>
                         );
                       })}
@@ -254,7 +255,7 @@ export default ({ setIsTransitionModalOpen, isTransitionModalOpen }) => {
                   <Button
                     onClick={() => {
                       handleAddExpense();
-                      refetch();
+                      reFetch();
                       setdateValue(new Date());
                       setamount("");
                       settagId([]);
