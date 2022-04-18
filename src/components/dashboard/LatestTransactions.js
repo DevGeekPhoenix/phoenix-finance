@@ -1,144 +1,106 @@
-import { format } from "date-fns";
-import { v4 as uuid } from "uuid";
 import PerfectScrollbar from "react-perfect-scrollbar";
+import PropTypes from "prop-types";
 import {
   Box,
-  Button,
   Card,
-  CardHeader,
   Table,
   TableBody,
   TableCell,
   TableHead,
+  TablePagination,
+  CardHeader,
+  Divider,
   TableRow,
-  TableSortLabel,
-  Tooltip,
+  Typography,
 } from "@mui/material";
-import ArrowRightIcon from "@mui/icons-material/ArrowRight";
-import { SeverityPill } from "../severity-pill";
+import { getInitials } from "../../utils/get-initials";
+import { useSelector } from "react-redux";
+import { useState, useEffect } from "react";
 
-const orders = [
-  {
-    id: uuid(),
-    ref: "CDD1049",
-    amount: 30.5,
-    customer: {
-      name: "Ekaterina Tankova",
-    },
-    createdAt: 1555016400000,
-    status: "pending",
-  },
-  {
-    id: uuid(),
-    ref: "CDD1048",
-    amount: 25.1,
-    customer: {
-      name: "Cao Yu",
-    },
-    createdAt: 1555016400000,
-    status: "delivered",
-  },
-  {
-    id: uuid(),
-    ref: "CDD1047",
-    amount: 10.99,
-    customer: {
-      name: "Alexa Richardson",
-    },
-    createdAt: 1554930000000,
-    status: "refunded",
-  },
-  {
-    id: uuid(),
-    ref: "CDD1046",
-    amount: 96.43,
-    customer: {
-      name: "Anje Keizer",
-    },
-    createdAt: 1554757200000,
-    status: "pending",
-  },
-  {
-    id: uuid(),
-    ref: "CDD1045",
-    amount: 32.54,
-    customer: {
-      name: "Clarke Gillebert",
-    },
-    createdAt: 1554670800000,
-    status: "delivered",
-  },
-  {
-    id: uuid(),
-    ref: "CDD1044",
-    amount: 16.76,
-    customer: {
-      name: "Adam Denisov",
-    },
-    createdAt: 1554670800000,
-    status: "delivered",
-  },
-];
+export const LatestTransactions = () => {
+  const userData = useSelector((state) => state.data.userData);
+  const [Expenses, setExpenses] = useState(null);
+  useEffect(() => {
+    const expenses = [];
+    for (let i = 0; i < 5; i++) {
+      expenses.push(userData?.myExpenses[i]);
+    }
+    console.log(expenses);
+    setExpenses(expenses);
+  }, [userData]);
 
-export const LatestTransactions = (props) => (
-  <Card {...props}>
-    <CardHeader title="Latest Transactions" />
-    <PerfectScrollbar>
-      <Box sx={{ minWidth: 800 }}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Order Ref</TableCell>
-              <TableCell>Customer</TableCell>
-              <TableCell sortDirection="desc">
-                <Tooltip enterDelay={300} title="Sort">
-                  <TableSortLabel active direction="desc">
-                    Date
-                  </TableSortLabel>
-                </Tooltip>
-              </TableCell>
-              <TableCell>Status</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {orders.map((order) => (
-              <TableRow hover key={order.id}>
-                <TableCell>{order.ref}</TableCell>
-                <TableCell>{order.customer.name}</TableCell>
-                <TableCell>{format(order.createdAt, "dd/MM/yyyy")}</TableCell>
-                <TableCell>
-                  <SeverityPill
-                    color={
-                      (order.status === "delivered" && "success") ||
-                      (order.status === "refunded" && "error") ||
-                      "warning"
-                    }
-                  >
-                    {order.status}
-                  </SeverityPill>
-                </TableCell>
+  const [limit, setLimit] = useState(5);
+  const [page, setPage] = useState(0);
+
+  const handleLimitChange = (event) => {
+    setLimit(event.target.value);
+  };
+
+  const handlePageChange = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  return (
+    <Card>
+      <CardHeader title="Latest Transactions" subheader="Your Last 5 Transactions" />
+      <Divider />
+      <PerfectScrollbar>
+        <Box>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Amount</TableCell>
+                <TableCell>Date</TableCell>
+                <TableCell>Address</TableCell>
+                <TableCell>Place</TableCell>
+                <TableCell>Tag</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </Box>
-    </PerfectScrollbar>
-    <Box
-      sx={{
-        display: "flex",
-        justifyContent: "flex-end",
-        p: 2,
-      }}
-    >
-      <Button
-        color="primary"
-        endIcon={<ArrowRightIcon fontSize="small" />}
-        size="small"
-        variant="text"
-        href="/transactions"
-      >
-        View all
-      </Button>
-    </Box>
-  </Card>
-);
+            </TableHead>
+            <TableBody>
+              {Expenses?.map((Expense) => {
+                const date = Expense.date.split("-");
+
+                return (
+                  <TableRow hover key={Expense._id}>
+                    <TableCell>
+                      <Box
+                        sx={{
+                          alignItems: "center",
+                          display: "flex",
+                        }}
+                      >
+                        <Typography color="textPrimary" variant="body1">
+                          {Expense.amount} Toman
+                        </Typography>
+                      </Box>
+                    </TableCell>
+                    <TableCell>
+                      <Typography color="textPrimary" variant="body1">
+                        {date[2].substr(0, 2) + "/" + date[1] + "/" + date[0]}
+                      </Typography>
+                    </TableCell>
+                    <TableCell>{Expense.address.Neighbourhood}</TableCell>
+                    <TableCell>{Expense.address.Place}</TableCell>
+                    <TableCell
+                      sx={{
+                        backgroundColor: `${Expense.tags[0].color}`,
+                        borderRadius: "15px",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      {Expense.tags[0].name.toUpperCase()}
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
+        </Box>
+      </PerfectScrollbar>
+    </Card>
+  );
+};
+
+LatestTransactions.propTypes = {
+  customers: PropTypes.array.isRequired,
+};
