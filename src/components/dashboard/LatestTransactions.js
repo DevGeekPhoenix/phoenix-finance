@@ -22,9 +22,15 @@ export const LatestTransactions = () => {
   const [Expenses, setExpenses] = useState(null);
   useEffect(() => {
     const expenses = [];
-    for (let i = 0; i < 5; i++) {
-      expenses.push(userData?.myExpenses[i]);
-    }
+
+    expenses.push(
+      userData?.myExpenses[userData?.myExpenses.length - 1],
+      userData?.myExpenses[userData?.myExpenses.length - 2],
+      userData?.myExpenses[userData?.myExpenses.length - 3],
+      userData?.myExpenses[userData?.myExpenses.length - 4],
+      userData?.myExpenses[userData?.myExpenses.length - 5]
+    );
+
     console.log(expenses);
     setExpenses(expenses);
   }, [userData]);
