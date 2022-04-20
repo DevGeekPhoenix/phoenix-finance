@@ -93,7 +93,6 @@ class UserSchema {
       if (!thisUser || !thisUser._id) throw new Error("bad request");
       return thisUser;
     } catch (error) {
-      console.log("error in findbyid", error);
       throw error;
     }
   }
@@ -119,14 +118,11 @@ class UserSchema {
 
   async login({ username, password }) {
     try {
-      const thisUser = (await this.findAll()).find(
-        (user) => user.username === username
-      );
+      const thisUser = (await this.findAll()).find((user) => user.username === username);
 
       if (!thisUser || !thisUser._id) throw new Error("bad request");
 
-      if (!compareSync(password, thisUser.password))
-        throw new Error("password doesnt match");
+      if (!compareSync(password, thisUser.password)) throw new Error("password doesnt match");
 
       return this.createToken(thisUser._id);
     } catch (error) {
@@ -135,23 +131,15 @@ class UserSchema {
   }
 
   async findByIdAndUpdate(_id, data) {
-    console.log(data);
     try {
       const thisUser = await this.findById(_id);
 
       Object.entries(data).forEach(([key, value]) => (thisUser[key] = value));
 
-      console.log("2");
-      const dest = path.join(
-        process.cwd(),
-        `/src/db/users/${thisUser._id}/info.txt`
-      );
-
-      console.log("3");
+      const dest = path.join(process.cwd(), `/src/db/users/${thisUser._id}/info.txt`);
 
       writeFileSync(dest, JSON.stringify(thisUser), "utf8");
 
-      console.log("whaaaaaaaaaaaat");
       return true;
     } catch (error) {
       throw error;

@@ -7,15 +7,10 @@ import { useQuery, gql } from "@apollo/client";
 const getUser = gql`
   query Query {
     me {
-      name
-      img
       _id
+      name
       username
-      myTags {
-        _id
-        name
-        color
-      }
+      img
       myExpenses {
         _id
         amount
@@ -28,13 +23,18 @@ const getUser = gql`
           lat
           lon
         }
+        date
         address {
           MunicipalityZone
           Neighbourhood
           FormattedAddress
           Place
         }
-        date
+      }
+      myTags {
+        _id
+        name
+        color
       }
     }
   }
@@ -48,7 +48,6 @@ export default () => {
   useEffect(() => {
     dispatch(setUserData(data?.me));
     dispatch(setRefetch(refetch));
-    console.log("data is changed");
   }, [data]);
   useEffect(() => {
     dispatch(setUserToken(token));

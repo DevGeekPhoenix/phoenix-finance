@@ -48,25 +48,27 @@ export default ({ setIsTransitionModalOpen, isTransitionModalOpen }) => {
   const [address, setaddress] = useState("");
   const [municipalityZone, setmunicipalityZone] = useState(0);
 
-  try {
-    useEffect(() => {
-      fetch(`https://api.neshan.org/v4/reverse?lat=${position[1]}&lng=${position[0]}`, {
-        headers: {
-          "Api-Key": "service.IoJuxHt4xVr9xKK01aw0AjeiUYvbnL79DNZF2Nvt",
-        },
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          setaddress(data.formatted_address ? data.formatted_address : "-");
-          setmunicipalityZone(data.municipality_zone ? data.municipality_zone : "-");
-          setNeighbourhood(data.neighbourhood ? data.neighbourhood : "-");
-          setPlace(data.place ? data.place : "-");
-          console.log(data);
-        });
-    }, [position]);
-  } catch (error) {
-    alert("Something Went Wrong!!! Try Again");
-  }
+  useEffect(() => {
+    async function abc() {
+      try {
+        await fetch(`https://api.neshan.org/v4/reverse?lat=${position[1]}&lng=${position[0]}`, {
+          headers: {
+            "Api-Key": "service.IoJuxHt4xVr9xKK01aw0AjeiUYvbnL79DNZF2Nvt",
+          },
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            setaddress(data.formatted_address ? data.formatted_address : "-");
+            setmunicipalityZone(data.municipality_zone ? data.municipality_zone : "-");
+            setNeighbourhood(data.neighbourhood ? data.neighbourhood : "-");
+            setPlace(data.place ? data.place : "-");
+          });
+      } catch (error) {
+        alert("Something Went Wrong!!! Try Again");
+      }
+    }
+    abc();
+  }, [position]);
 
   const [submitAddExpense] = useMutation(addExpense);
 

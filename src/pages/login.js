@@ -25,6 +25,7 @@ const login = gql`
 `;
 
 const Login = () => {
+  
   const [submit] = useMutation(login);
   const dispatch = useDispatch();
 
@@ -45,7 +46,6 @@ const Login = () => {
         } = await submit({
           variables: { username: formik.values.UserName, password: formik.values.password },
         });
-        console.log("#######");
         if (login.token) {
           dispatch(setUserToken(login.token));
           cookies.set("ut", login.token);

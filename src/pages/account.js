@@ -16,7 +16,6 @@ const Account = () => {
   }, [userData]);
 
   const [preview, setpreview] = useState("");
-  console.log(preview);
   return (
     <>
       <Head>

@@ -42,13 +42,20 @@ export const CustomerListResults = ({
                 <TableCell>Date</TableCell>
                 <TableCell>Address</TableCell>
                 <TableCell>Place</TableCell>
-                <TableCell>Tag</TableCell>
+                <TableCell
+                  sx={{
+                    width: "100%",
+                    display: "flex",
+                    justifyContent: "center",
+                  }}
+                >
+                  Tag
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {filteredExpenses?.myExpenses
                 .filter((expense) => {
-                  console.log();
                   return (
                     expense.tags[0].name.toLowerCase().includes(searchTransaction.toLowerCase()) ||
                     expense.address.Neighbourhood.toLowerCase().includes(
@@ -85,12 +92,23 @@ export const CustomerListResults = ({
                       <TableCell>{Expense.address.Place}</TableCell>
                       <TableCell
                         sx={{
-                          backgroundColor: `${Expense.tags[0].color}`,
-                          borderRadius: "15px",
-                          fontWeight: "bold",
+                          width: "100%",
+                          display: "flex",
+                          justifyContent: "center",
                         }}
                       >
-                        {Expense.tags[0].name.toUpperCase()}
+                        <Typography
+                          sx={{
+                            backgroundColor: `${Expense.tags[0].color}`,
+                            borderRadius: "15px",
+                            fontWeight: "bold",
+                            fontSize: "14px",
+                            py: 1,
+                            px: 2,
+                          }}
+                        >
+                          {Expense.tags[0].name.toUpperCase()}
+                        </Typography>
                       </TableCell>
                     </TableRow>
                   );

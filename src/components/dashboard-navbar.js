@@ -31,6 +31,12 @@ const DashboardNavbarRoot = styled(AppBar)(({ theme }) => ({
 export const DashboardNavbar = (props) => {
   const userData = useSelector((state) => state.data.userData);
 
+  const [profileData, setProfileData] = useState([]);
+
+  useEffect(() => {
+    setProfileData(userData);
+  }, [userData]);
+
   const date = new Date();
 
   const months = [
@@ -96,7 +102,7 @@ export const DashboardNavbar = (props) => {
             </IconButton>
 
             <Typography alignSelf={"center"} fontSize="large" fontWeight="bold" color="GrayText">
-              Hi {userData?.name}
+              Hi {profileData?.name}
             </Typography>
           </Box>
 
@@ -107,7 +113,7 @@ export const DashboardNavbar = (props) => {
               ml: 1,
               boxShadow: "0px 5px 5px #888888",
             }}
-            src={userData?.img ? `${domain}/${userData?.img}` : ""}
+            src={profileData?.img ? `${domain}/${profileData?.img}` : ""}
           >
             <UserCircleIcon fontSize="small" />
           </Avatar>

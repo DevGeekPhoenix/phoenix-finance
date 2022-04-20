@@ -1,5 +1,5 @@
 import React, { useMemo, useRef } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { createUploadLink } from "apollo-upload-client";
 
 import {

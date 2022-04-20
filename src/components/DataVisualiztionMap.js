@@ -1,12 +1,5 @@
 import { useEffect, useState } from "react";
-// import { MapContainer, TileLayer, GeoJSON } from "react-leaflet";
-// import { useMap } from "react-leaflet";
-// import "node_modules/leaflet-geosearch/dist/geosearch.css";
-// import "leaflet/dist/leaflet.css";
-// import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css"; // Re-uses images from ~leaflet package
-// import "leaflet-defaulticon-compatibility";
 import { useSelector } from "react-redux";
-// import NeshanMap from "react-neshan-map-leaflet";
 import dynamic from "next/dynamic";
 
 export default () => {
@@ -18,9 +11,12 @@ export default () => {
     }
   );
   const userData = useSelector((state) => state.data.userData);
-  const [position, setPosition] = useState([35.6892, 51.389]);
+  const [position, setPosition] = useState([]);
   const [geoJSONArray, setgeoJSONArray] = useState([]);
-
+  const activeUseMap = () => {
+    return null;
+  };
+  activeUseMap();
   useEffect(() => {
     let cloneState = [];
     for (let i = 0; i < userData?.myExpenses.length; i++) {
@@ -38,8 +34,8 @@ export default () => {
       });
     }
     setgeoJSONArray(cloneState);
+    setPosition([35.6892, 51.389]);
   }, [userData]);
-  console.log(geoJSONArray);
 
   return (
     <NeshanMap
@@ -48,22 +44,19 @@ export default () => {
         maptype: "dreamy",
         poi: true,
         traffic: false,
-        center: [35.699739, 51.338097],
+        center: [position[0], position[1]],
         zoom: 11,
       }}
+      style={{ width: "73vw", height: "100%" }}
       onInit={(L, myMap) => {
         myMap.invalidateSize();
-        // myMap.on("click", function (e) {
-        //   marker.setLatLng(e.latlng);
-        // });
-
         {
           geoJSONArray.map((geoJSON, i) => {
             return L.circle([geoJSON.geometry.coordinates[1], geoJSON.geometry.coordinates[0]], {
               color: `${geoJSON.properties.color}`,
               fillColor: `${geoJSON.properties.color}`,
-              fillOpacity: 0.5,
-              radius: 600,
+              fillOpacity: 0.2,
+              radius: 700,
             })
               .addTo(myMap)
               .bindPopup(`${geoJSON.properties.name}<br/>${geoJSON.properties.amount} Toman`);

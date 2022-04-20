@@ -6,5 +6,4 @@ export const store = configureStore({
   reducer: {
     data: dataReaducer,
   },
-  middleware: [logger],
 });

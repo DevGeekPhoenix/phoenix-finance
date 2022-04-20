@@ -34,9 +34,22 @@ export const ProductListToolbar = (props) => {
           Analytics
         </Typography>
       </Box>
-
-      <Grid item height="450px" sx={{ mt: 2 }} md={12} xs={12}>
-        <DataVisualiztionMap />
+      <Grid
+        sx={{
+          width: "100%",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Grid item height="450px" sx={{ mt: 2 }} md={12} xs={12}>
+          <DataVisualiztionMap />
+        </Grid>
+        {/* <iframe
+          src="https://www.google.com/maps/d/embed?mid=1-6HQGXmwwew02zeDR5KpY1OA1mc&hl=en_US&ehbc=2E312F"
+          width="640"
+          height="480"
+        ></iframe> */}
       </Grid>
     </Box>
   );

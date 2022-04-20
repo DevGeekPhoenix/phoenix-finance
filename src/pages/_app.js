@@ -28,6 +28,12 @@ const App = (props) => {
   useEffect(() => {
     if (!token) router.replace("/login");
   }, [token]);
+  console.log(router.pathname);
+  useEffect(() => {
+    if (router.pathname === "/login") {
+      cookies.remove("ut");
+    }
+  }, [router.pathname]);
 
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
 

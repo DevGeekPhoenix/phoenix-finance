@@ -15,24 +15,17 @@ import {
 } from "@mui/material";
 import { getInitials } from "../../utils/get-initials";
 import { useSelector } from "react-redux";
-import { useState, useEffect } from "react";
+import { useState, useMemo } from "react";
 
 export const LatestTransactions = () => {
   const userData = useSelector((state) => state.data.userData);
-  const [Expenses, setExpenses] = useState(null);
-  useEffect(() => {
-    const expenses = [];
-
-    expenses.push(
-      userData?.myExpenses[userData?.myExpenses.length - 1],
-      userData?.myExpenses[userData?.myExpenses.length - 2],
-      userData?.myExpenses[userData?.myExpenses.length - 3],
-      userData?.myExpenses[userData?.myExpenses.length - 4],
-      userData?.myExpenses[userData?.myExpenses.length - 5]
-    );
-
-    console.log(expenses);
-    setExpenses(expenses);
+  const [Expenses, setExpenses] = useState([]);
+  useMemo(() => {
+    let latestTransactions = [];
+    for (let i = userData?.myExpenses.length - 1; i > userData?.myExpenses.length - 6; i--) {
+      latestTransactions.push(userData?.myExpenses[i]);
+    }
+    setExpenses(latestTransactions);
   }, [userData]);
 
   const [limit, setLimit] = useState(5);
@@ -59,7 +52,15 @@ export const LatestTransactions = () => {
                 <TableCell>Date</TableCell>
                 <TableCell>Address</TableCell>
                 <TableCell>Place</TableCell>
-                <TableCell>Tag</TableCell>
+                <TableCell
+                  sx={{
+                    width: "100%",
+                    display: "flex",
+                    justifyContent: "center",
+                  }}
+                >
+                  Tag
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -89,12 +90,23 @@ export const LatestTransactions = () => {
                     <TableCell>{Expense.address.Place}</TableCell>
                     <TableCell
                       sx={{
-                        backgroundColor: `${Expense.tags[0].color}`,
-                        borderRadius: "15px",
-                        fontWeight: "bold",
+                        width: "100%",
+                        display: "flex",
+                        justifyContent: "center",
                       }}
                     >
-                      {Expense.tags[0].name.toUpperCase()}
+                      <Typography
+                        sx={{
+                          backgroundColor: `${Expense.tags[0].color}`,
+                          borderRadius: "15px",
+                          fontWeight: "bold",
+                          fontSize: "14px",
+                          py: 1,
+                          px: 2,
+                        }}
+                      >
+                        {Expense.tags[0].name.toUpperCase()}
+                      </Typography>
                     </TableCell>
                   </TableRow>
                 );

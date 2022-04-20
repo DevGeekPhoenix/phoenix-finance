@@ -1,18 +1,8 @@
-import {
-  Avatar,
-  Box,
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  Divider,
-  Typography,
-} from "@mui/material";
+import { Avatar, Box, Card, CardContent, Divider, Typography } from "@mui/material";
 import { useSelector } from "react-redux";
 
 export const AccountProfile = ({ preview }) => {
   const userData = useSelector((state) => state.data.userData);
-  console.log(preview);
   return (
     <Card>
       <CardContent>

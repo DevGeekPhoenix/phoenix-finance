@@ -13,10 +13,15 @@ import { User as UserIcon } from "../icons/user";
 import { UserAdd as UserAddIcon } from "../icons/user-add";
 import { Users as UsersIcon } from "../icons/users";
 import { XCircle as XCircleIcon } from "../icons/x-circle";
+import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import { Logo } from "./logo";
 import { NavItem } from "./nav-item";
 import SwapHorizIcon from "@mui/icons-material/SwapHoriz";
 import TopicIcon from "@mui/icons-material/Topic";
+import Cookies from "universal-cookie";
+const cookies = new Cookies();
+
+const removeCookie = () => {};
 
 const items = [
   {
@@ -34,11 +39,7 @@ const items = [
     icon: <ChartBarIcon fontSize="small" />,
     title: "Analytics",
   },
-  {
-    href: "/BankAccountManagment",
-    icon: <TopicIcon fontSize="small" />,
-    title: "BankAccountManagment",
-  },
+
   {
     href: "/account",
     icon: <UserIcon fontSize="small" />,
@@ -46,8 +47,8 @@ const items = [
   },
   {
     href: "/login",
-    icon: <LockIcon fontSize="small" />,
-    title: "Login",
+    icon: <ExitToAppIcon fontSize="small" />,
+    title: "Exit",
   },
 ];
 
@@ -59,19 +60,15 @@ export const DashboardSidebar = (props) => {
     noSsr: false,
   });
 
-  useEffect(
-    () => {
-      if (!router.isReady) {
-        return;
-      }
+  useEffect(() => {
+    if (!router.isReady) {
+      return;
+    }
 
-      if (open) {
-        onClose?.();
-      }
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [router.asPath]
-  );
+    if (open) {
+      onClose?.();
+    }
+  }, [router.asPath]);
 
   const content = (
     <>

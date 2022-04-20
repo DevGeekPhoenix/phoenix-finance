@@ -47,7 +47,6 @@ class TagSchema {
 
       return result
     } catch (error) {
-      console.log(error)
       return []
     }
   }

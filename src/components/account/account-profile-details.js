@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import { useSelector } from "react-redux";
 import { useState, useEffect } from "react";
-import { useMutation, gql, useQuery } from "@apollo/client";
+import { useMutation, gql } from "@apollo/client";
 
 const editUser = gql`
   mutation EditMe($name: String!, $img: Upload) {
@@ -23,6 +23,7 @@ const editUser = gql`
 
 export const AccountProfileDetails = ({ setpreview }) => {
   const userData = useSelector((state) => state.data.userData);
+  const refetch = useSelector((state) => state.data.refetch);
 
   const [submitEditUser] = useMutation(editUser);
 
@@ -44,8 +45,6 @@ export const AccountProfileDetails = ({ setpreview }) => {
     }
   }, [img]);
 
-  console.log(img);
-
   const handleEditUser = async () => {
     try {
       const {
@@ -59,8 +58,7 @@ export const AccountProfileDetails = ({ setpreview }) => {
         },
       });
 
-      // console.log(data);
-      if (status === 200) alert("eas");
+      if (status === 200) alert("Profile Updated Successfully");
     } catch (error) {
       alert(error);
     }
@@ -106,7 +104,14 @@ export const AccountProfileDetails = ({ setpreview }) => {
             p: 2,
           }}
         >
-          <Button onClick={() => handleEditUser()} color="primary" variant="contained">
+          <Button
+            onClick={() => {
+              handleEditUser();
+              refetch();
+            }}
+            color="primary"
+            variant="contained"
+          >
             Save details
           </Button>
         </Box>

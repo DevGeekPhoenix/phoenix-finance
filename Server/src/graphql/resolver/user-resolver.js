@@ -16,7 +16,6 @@ export default {
 
         return thisuser;
       } catch (error) {
-        console.log(error);
         throw error;
       }
     },
@@ -44,10 +43,6 @@ export default {
       }
     },
     editMe: async (_, { name, img }, { user }) => {
-      console.log("************");
-      console.log(img);
-      console.log(name);
-
       let imgurl;
       try {
         const thisuser = await authorizeUser(user);
@@ -69,7 +64,6 @@ export default {
           await finished(out);
         }
 
-        console.log("salamasadsad");
         await User.findByIdAndUpdate(thisuser._id, {
           name,
           img: imgurl,
