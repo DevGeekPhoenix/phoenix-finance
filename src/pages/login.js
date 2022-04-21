@@ -3,15 +3,10 @@ import NextLink from "next/link";
 import { useRouter } from "next/router";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { Box, Button, Container, Grid, Link, TextField, Typography } from "@mui/material";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { Facebook as FacebookIcon } from "../icons/facebook";
-import { Google as GoogleIcon } from "../icons/google";
-import { useState, useEffect } from "react";
-import { useQuery, gql, useMutation } from "@apollo/client";
+import { Box, Button, Container, Link, TextField, Typography } from "@mui/material";
+import { gql, useMutation } from "@apollo/client";
 import Cookies from "universal-cookie";
-import { color } from "@mui/system";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { setUserToken } from "../Redux/Reducer";
 
 const cookies = new Cookies();
@@ -25,7 +20,6 @@ const login = gql`
 `;
 
 const Login = () => {
-  
   const [submit] = useMutation(login);
   const dispatch = useDispatch();
 

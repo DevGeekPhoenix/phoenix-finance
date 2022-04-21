@@ -6,8 +6,6 @@ import { CssBaseline } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
 import { createEmotionCache } from "../utils/create-emotion-cache";
 import { theme } from "../theme";
-import apolloClient from "../components/apollo-client";
-// import { ApolloProvider } from "@apollo/react-hooks";
 import CustomApolloProvider from "../components/apollo-client";
 import Cookies from "universal-cookie";
 import { useEffect } from "react";
@@ -28,7 +26,6 @@ const App = (props) => {
   useEffect(() => {
     if (!token) router.replace("/login");
   }, [token]);
-  console.log(router.pathname);
   useEffect(() => {
     if (router.pathname === "/login") {
       cookies.remove("ut");

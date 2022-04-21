@@ -1,7 +1,4 @@
-import { useState } from "react";
 import PerfectScrollbar from "react-perfect-scrollbar";
-import PropTypes from "prop-types";
-import GoogleIcon from "@mui/icons-material/Google";
 import {
   Box,
   Card,
@@ -9,28 +6,11 @@ import {
   TableBody,
   TableCell,
   TableHead,
-  TablePagination,
   TableRow,
   Typography,
 } from "@mui/material";
-import { getInitials } from "../../utils/get-initials";
 
-export const CustomerListResults = ({
-  filteredExpenses,
-  setfilteredExpenses,
-  searchTransaction,
-}) => {
-  const [limit, setLimit] = useState(5);
-  const [page, setPage] = useState(0);
-
-  const handleLimitChange = (event) => {
-    setLimit(event.target.value);
-  };
-
-  const handlePageChange = (event, newPage) => {
-    setPage(newPage);
-  };
-
+export const ExpensesList = ({ filteredExpenses, searchTransaction }) => {
   return (
     <Card>
       <PerfectScrollbar>
@@ -117,19 +97,6 @@ export const CustomerListResults = ({
           </Table>
         </Box>
       </PerfectScrollbar>
-      <TablePagination
-        component="div"
-        count={filteredExpenses?.myExpenses.length}
-        onPageChange={handlePageChange}
-        onRowsPerPageChange={handleLimitChange}
-        page={page}
-        rowsPerPage={limit}
-        rowsPerPageOptions={[5, 10, 25]}
-      />
     </Card>
   );
-};
-
-CustomerListResults.propTypes = {
-  customers: PropTypes.array.isRequired,
 };

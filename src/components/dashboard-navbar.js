@@ -1,22 +1,9 @@
 import PropTypes from "prop-types";
 import styled from "@emotion/styled";
-import {
-  AppBar,
-  Avatar,
-  Badge,
-  Box,
-  IconButton,
-  Toolbar,
-  Tooltip,
-  Typography,
-} from "@mui/material";
+import { AppBar, Avatar, Box, IconButton, Toolbar, Typography } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import SearchIcon from "@mui/icons-material/Search";
-import { Bell as BellIcon } from "../icons/bell";
 import { UserCircle as UserCircleIcon } from "../icons/user-circle";
-import { Users as UsersIcon } from "../icons/users";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
-import { useQuery, gql } from "@apollo/client";
 import { useSelector, useDispatch } from "react-redux";
 import { useState, useEffect } from "react";
 import constants from "../config/constants";

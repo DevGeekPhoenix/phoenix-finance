@@ -1,7 +1,7 @@
 import Head from "next/head";
 import { Box, Container, Grid } from "@mui/material";
-import { LatestTransactions } from "../components/dashboard/LatestTransactions";
-import { CardDetails } from "../components/dashboard/CardDetails";
+import { LatestTransactions } from "../components/Dashboard/LatestTransactions";
+import { CardDetails } from "../components/Dashboard/CardDetails";
 import { DashboardLayout } from "../components/dashboard-layout";
 import { useSelector } from "react-redux";
 

@@ -12,12 +12,7 @@ import { Search as SearchIcon } from "../../icons/search";
 import { useState } from "react";
 import AddTransactionModal from "./AddTransactionModal";
 
-export const CustomerListToolbar = ({
-  filteredExpenses,
-  setfilteredExpenses,
-  searchTransaction,
-  setsearchTransaction,
-}) => {
+export const ExpensesListToolbar = ({ searchTransaction, setsearchTransaction }) => {
   const [isTransitionModalOpen, setIsTransitionModalOpen] = useState(false);
 
   return (

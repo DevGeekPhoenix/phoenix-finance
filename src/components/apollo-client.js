@@ -1,16 +1,8 @@
 import React, { useMemo, useRef } from "react";
 import { useSelector } from "react-redux";
 import { createUploadLink } from "apollo-upload-client";
-
-import {
-  ApolloClient,
-  createHttpLink,
-  InMemoryCache,
-  ApolloProvider,
-  ApolloLink,
-} from "@apollo/client";
+import { ApolloClient, InMemoryCache, ApolloProvider, ApolloLink } from "@apollo/client";
 import { onError } from "@apollo/client/link/error";
-
 import { setContext } from "@apollo/client/link/context";
 
 const graphqlEndpoint = `http://localhost:80/graphql`;

@@ -97,7 +97,6 @@ export default ({ setIsTransitionModalOpen, isTransitionModalOpen }) => {
       });
     } catch (error) {
       alert(error);
-      setIsTransitionModalOpen(false);
     }
   };
 

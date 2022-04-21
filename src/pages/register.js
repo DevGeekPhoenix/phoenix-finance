@@ -15,16 +15,15 @@ import {
 } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import Cookies from "universal-cookie";
-import { useState, useEffect } from "react";
-import { useQuery, gql, useMutation } from "@apollo/client";
-import { useSelector, useDispatch } from "react-redux";
+import {  gql, useMutation } from "@apollo/client";
+import {  useDispatch } from "react-redux";
 import { setUserToken } from "../Redux/Reducer";
 
 const cookies = new Cookies();
 
 const signup = gql`
-  mutation Mutation($name: String!, $username: String!, $img: String!, $password: String!) {
-    signup(name: $name, username: $username, img: $img, password: $password) {
+  mutation Mutation($name: String!, $username: String!, $password: String!) {
+    signup(name: $name, username: $username, password: $password) {
       token
     }
   }
@@ -39,14 +38,14 @@ const Register = () => {
     initialValues: {
       name: "",
       userName: "",
-      imgUrl: "",
+
       password: "",
       policy: false,
     },
     validationSchema: Yup.object({
       name: Yup.string().trim().min(3).max(50).required("Name is required"),
       userName: Yup.string().trim().min(3).max(15).required("UserName is Required"),
-      imgUrl: Yup.string().trim().required("Profile ImgUrl is required"),
+
       password: Yup.string().trim().min(3).max(20).required("Password is required"),
       policy: Yup.boolean().oneOf([true], "This field must be checked"),
     }),
@@ -58,7 +57,7 @@ const Register = () => {
           variables: {
             name: formik.values.name,
             username: formik.values.userName,
-            img: formik.values.imgUrl,
+
             password: formik.values.password,
           },
         });
@@ -131,19 +130,7 @@ const Register = () => {
               value={formik.values.userName}
               variant="outlined"
             />
-            <TextField
-              error={Boolean(formik.touched.imgUrl && formik.errors.imgUrl)}
-              fullWidth
-              helperText={formik.touched.imgUrl && formik.errors.imgUrl}
-              label="Profile ImgUrl"
-              margin="normal"
-              name="imgUrl"
-              onBlur={formik.handleBlur}
-              onChange={formik.handleChange}
-              type="imgUrl"
-              value={formik.values.imgUrl}
-              variant="outlined"
-            />
+
             <TextField
               error={Boolean(formik.touched.password && formik.errors.password)}
               fullWidth

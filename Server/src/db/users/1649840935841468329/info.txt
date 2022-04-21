@@ -1,1 +1,0 @@
-{"name":"Ali","username":"Hasani","img":"https://res.cloudinary.com/jerrick/image/upload/f_jpg,fl_progressive,q_auto,w_1024/vw05sgzdlorqja6lmz6b.jpg","_id":"1649840935841468329","password":"$2b$09$90.aXID8JQC080bUAuxJQO12.HGjNR6SXkOp2NqovVnpZne8nTvAy"}

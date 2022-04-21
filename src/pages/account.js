@@ -1,7 +1,7 @@
 import Head from "next/head";
 import { Box, Container, Grid, Typography } from "@mui/material";
-import { AccountProfile } from "../components/account/account-profile";
-import { AccountProfileDetails } from "../components/account/account-profile-details";
+import { AccountProfile } from "../components/Account/account-profile";
+import { AccountProfileDetails } from "../components/Account/account-profile-details";
 import { DashboardLayout } from "../components/dashboard-layout";
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";

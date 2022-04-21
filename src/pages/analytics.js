@@ -1,14 +1,12 @@
 import Head from "next/head";
 import { Box, Container, Grid, Pagination } from "@mui/material";
-import { products } from "../__mocks__/products";
-import { ProductListToolbar } from "../components/product/product-list-toolbar";
-import { ProductCard } from "../components/product/product-card";
+import { AnalyticsLayout } from "../components/Analytics/analyticslayout";
 import { DashboardLayout } from "../components/dashboard-layout";
 
-const Products = () => (
+const Analytics = () => (
   <>
     <Head>
-      <title>Products | Phoenix Finance</title>
+      <title>Analytics | Phoenix Finance</title>
     </Head>
     <Box
       component="main"
@@ -18,7 +16,7 @@ const Products = () => (
       }}
     >
       <Container maxWidth={false}>
-        <ProductListToolbar />
+        <AnalyticsLayout />
         <Box sx={{ pt: 3 }}></Box>
         <Box
           sx={{
@@ -32,6 +30,6 @@ const Products = () => (
   </>
 );
 
-Products.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
+Analytics.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
-export default Products;
+export default Analytics;

@@ -1,7 +1,7 @@
 import Head from "next/head";
 import { Box, Container } from "@mui/material";
-import { CustomerListResults } from "../components/Transactions/customer-list-results";
-import { CustomerListToolbar } from "../components/Transactions/customer-list-toolbar";
+import { ExpensesList } from "../components/Transactions/ExpensesList";
+import { ExpensesListToolbar } from "../components/Transactions/ExpensesListToolbar";
 import { DashboardLayout } from "../components/dashboard-layout";
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
@@ -28,14 +28,14 @@ const Customers = () => {
         }}
       >
         <Container maxWidth={false}>
-          <CustomerListToolbar
+          <ExpensesListToolbar
             filteredExpenses={filteredExpenses}
             setfilteredExpenses={setfilteredExpenses}
             setsearchTransaction={setsearchTransaction}
             searchTransaction={searchTransaction}
           />
           <Box sx={{ mt: 3 }}>
-            <CustomerListResults
+            <ExpensesList
               filteredExpenses={filteredExpenses}
               setfilteredExpenses={setfilteredExpenses}
               searchTransaction={searchTransaction}

@@ -8,7 +8,7 @@ type Me {
   _id: ID!
   name: String!
   username: String!
-  img: String!
+  img: String
   myTags: [Tag!]!
   myExpenses: [Expense!]!
 }
